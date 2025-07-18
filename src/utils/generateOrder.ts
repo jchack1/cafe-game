@@ -7,11 +7,11 @@ export const generateOrder = (level: number): Order => {
   //get a random recipe from recipes file
   const recipesForLevel = recipes.filter((recipe) => recipe.level === level);
 
-  const randomRecipeIndex = Math.floor(Math.random() * recipesForLevel.length);
+  const randomRecipeId = Math.floor(Math.random() * recipesForLevel.length + 1);
 
   const newOrder: Order = {
     id: String(Math.random() * 1000000), //get better id string later when we are saving to db or local storage - uuid?
-    items: [randomRecipeIndex],
+    items: [randomRecipeId],
   };
 
   return newOrder;

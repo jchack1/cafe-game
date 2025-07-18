@@ -1,11 +1,25 @@
+//hooks
 import { useState, useEffect } from "react";
-import { recipeMap, ingredients } from "./recipes";
+//components
+import { Button } from "./components/ui/Button";
+import { Mug } from "./components/dragAndDrop/Mug";
+import { Ingredients } from "./components/dragAndDrop/Ingredients";
+//helpers/types
+import { recipeMap } from "./recipes";
 import "./App.css";
 import { generateOrder } from "./utils/generateOrder";
 import type { Recipe, Order, SelectedIngredients } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
+import { DndContext } from "@dnd-kit/core";
+import type { DragEndEvent } from "@dnd-kit/core";
 
+/**
+ *
+ * @todo: major styling work
+ */
 function App() {
+  //state
+
   const [currentOrder, setCurrentOrder] = useState<Order>();
   const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
   const [level] = useState(1);
@@ -13,27 +27,14 @@ function App() {
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
 
+  // handlers
+
   const handleGetOrder = () => {
     const newOrder = generateOrder(level);
 
     setCurrentOrder(newOrder);
     setCurrentRecipe(recipeMap[newOrder.items[0]]);
     setSelectedIngredients({});
-  };
-
-  const handleSelectIngredient = (ingredient: string) => {
-    // console.log(ingredient);
-    setSelectedIngredients((prevSelection) => {
-      const updatedSelection = { ...prevSelection };
-
-      if (updatedSelection[ingredient]) {
-        updatedSelection[ingredient] = updatedSelection[ingredient] + 1;
-      } else {
-        updatedSelection[ingredient] = 1;
-      }
-
-      return updatedSelection;
-    });
   };
 
   const handleCheckOrder = () => {
@@ -50,59 +51,79 @@ function App() {
     }
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    if (event.over) {
+      const currentIngredient = event.active.id;
+
+      setSelectedIngredients((prevSelection) => {
+        const updatedSelection = { ...prevSelection };
+
+        if (updatedSelection[currentIngredient]) {
+          updatedSelection[currentIngredient] =
+            updatedSelection[currentIngredient] + 1;
+        } else {
+          updatedSelection[currentIngredient] = 1;
+        }
+
+        return updatedSelection;
+      });
+    }
+  };
+
+  //get a new order when page loads
   useEffect(() => {
     handleGetOrder();
   }, []);
 
   return (
-    <>
-      {currentRecipe?.name && <h1>{currentRecipe.name}</h1>}
-
-      {showRecipe && currentRecipe && (
-        <div>
-          <p>Recipe</p>
-
-          {Object.entries(currentRecipe.ingredients).map(
-            ([ingredient, number]) => (
-              <p>
-                {number}x {ingredient}
-              </p>
-            )
-          )}
-        </div>
-      )}
-
-      <button onClick={() => handleGetOrder()}>Get order</button>
-      <button onClick={() => setShowRecipe(!showRecipe)}>
-        {showRecipe ? "Hide Recipe" : "Show Recipe"}
-      </button>
-
-      <select
-        id="ingredients"
-        onChange={(e) => {
-          handleSelectIngredient(e.target.value);
-          e.target.value = "";
+    <DndContext onDragEnd={handleDragEnd}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-        defaultValue=""
       >
-        <option value="" disabled>
-          Select ingredient...
-        </option>
-        {ingredients.map((ingredient) => (
-          <option value={ingredient}>{ingredient}</option>
+        {/* show recipe name */}
+        {currentRecipe?.name && <h1>{currentRecipe.name}</h1>}
+
+        {/* if they choose to view it, show ingredients */}
+        {showRecipe && currentRecipe && (
+          <div>
+            <p>Recipe</p>
+
+            {Object.entries(currentRecipe.ingredients).map(
+              ([ingredient, number]) => (
+                <p>
+                  {number}x {ingredient}
+                </p>
+              )
+            )}
+          </div>
+        )}
+
+        <Button onClick={() => handleGetOrder()}>Get order</Button>
+        <Button onClick={() => setShowRecipe(!showRecipe)}>
+          {showRecipe ? "Hide Recipe" : "Show Recipe"}
+        </Button>
+
+        {/* display chosen ingredients */}
+        {Object.entries(selectedIngredients).map(([ingredient, number]) => (
+          <div>
+            <span>
+              {number} {ingredient}
+            </span>
+          </div>
         ))}
-      </select>
 
-      {Object.entries(selectedIngredients).map(([ingredient, number]) => (
-        <div>
-          <span>
-            {number} {ingredient}
-          </span>
-        </div>
-      ))}
+        {/* draggable ingredients fill inside the ingredients area */}
+        <Ingredients />
 
-      <button onClick={() => handleCheckOrder()}>Complete</button>
-    </>
+        <Mug id={Math.random() * 10} />
+
+        <Button onClick={() => handleCheckOrder()}>Complete</Button>
+      </div>
+    </DndContext>
   );
 }
 

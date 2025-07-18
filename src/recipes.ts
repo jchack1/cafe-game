@@ -66,7 +66,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: 7,
-    name: "hotChocolate",
+    name: "hot chocolate",
     ingredients: {
       milk: 3,
       chocolate: 1,
