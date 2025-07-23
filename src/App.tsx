@@ -8,7 +8,7 @@ import { Ingredients } from "./components/dragAndDrop/Ingredients";
 import { recipeMap } from "./recipes";
 import "./App.css";
 import { generateOrder } from "./utils/generateOrder";
-import type { Recipe, Order, SelectedIngredients } from "./types";
+import type { Recipe, Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
 import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
@@ -21,9 +21,9 @@ function App() {
   //state
 
   const [currentOrder, setCurrentOrder] = useState<Order>();
-  const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
+  // const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
   const [level] = useState(1);
-  const [showRecipe, setShowRecipe] = useState(false);
+  // const [showRecipe, setShowRecipe] = useState(false);
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
 
@@ -33,36 +33,79 @@ function App() {
     const newOrder = generateOrder(level);
 
     setCurrentOrder(newOrder);
-    setCurrentRecipe(recipeMap[newOrder.items[0]]);
+    // setCurrentRecipe(recipeMap[newOrder.items[0]]);
     setSelectedIngredients({});
   };
 
   const handleCheckOrder = () => {
-    if (!currentRecipe || !selectedIngredients) {
-      alert("?? ");
-      return;
+    const orderSuccesses: OrderItem[] = [];
+    const orderFails: OrderItem[] = [];
+
+    for (const [orderItemId, selected] of Object.entries(selectedIngredients)) {
+      const orderItem = currentOrder?.items.find(
+        (item) => item.id === orderItemId
+      );
+
+      if (!orderItem) {
+        alert("error!");
+        return;
+      }
+      const recipeIngredients = recipeMap[orderItem.recipeId].ingredients;
+
+      if (areObjectsEqual(selected, recipeIngredients)) {
+        orderSuccesses.push({
+          ...orderItem,
+          result: "success!",
+        });
+      } else {
+        orderFails.push({
+          ...orderItem,
+          result: "fail!",
+        });
+      }
     }
-    if (areObjectsEqual(selectedIngredients, currentRecipe.ingredients)) {
-      alert("good job!");
-      handleGetOrder();
-      setSelectedIngredients({});
+    if (orderFails.length > 0) {
+      setCurrentOrder((prevOrder) => {
+        if (!prevOrder) return prevOrder;
+
+        return {
+          ...prevOrder,
+          items: [...orderSuccesses, ...orderFails],
+        };
+      });
     } else {
-      alert("fail!");
+      alert("Success!");
+      setSelectedIngredients({});
+      handleGetOrder();
     }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     if (event.over) {
+      const orderItemId = event.over.id;
       const currentIngredient = event.active.id;
 
       setSelectedIngredients((prevSelection) => {
         const updatedSelection = { ...prevSelection };
 
-        if (updatedSelection[currentIngredient]) {
-          updatedSelection[currentIngredient] =
-            updatedSelection[currentIngredient] + 1;
+        //check if we've added ingredients to this order item yet
+        const currentOrderItem = updatedSelection[orderItemId];
+
+        //if we haven't, create the order item object in state and add current ingredient
+        if (!currentOrderItem) {
+          updatedSelection[orderItemId] = {
+            [currentIngredient]: 1,
+          };
+          //if not, find the current item and increment current ingredient
         } else {
-          updatedSelection[currentIngredient] = 1;
+          const updatedOrderItem = {
+            ...currentOrderItem,
+            [currentIngredient]: currentOrderItem[currentIngredient]
+              ? currentOrderItem[currentIngredient] + 1
+              : 1,
+          };
+
+          updatedSelection[orderItemId] = updatedOrderItem;
         }
 
         return updatedSelection;
@@ -85,10 +128,10 @@ function App() {
         }}
       >
         {/* show recipe name */}
-        {currentRecipe?.name && <h1>{currentRecipe.name}</h1>}
+        {/* {currentRecipe?.name && <h1>{currentRecipe.name}</h1>} */}
 
         {/* if they choose to view it, show ingredients */}
-        {showRecipe && currentRecipe && (
+        {/* {showRecipe && currentRecipe && (
           <div>
             <p>Recipe</p>
 
@@ -100,27 +143,46 @@ function App() {
               )
             )}
           </div>
-        )}
+        )} */}
 
         <Button onClick={() => handleGetOrder()}>Get order</Button>
-        <Button onClick={() => setShowRecipe(!showRecipe)}>
+        {/* <Button onClick={() => setShowRecipe(!showRecipe)}>
           {showRecipe ? "Hide Recipe" : "Show Recipe"}
-        </Button>
-
-        {/* display chosen ingredients */}
-        {Object.entries(selectedIngredients).map(([ingredient, number]) => (
-          <div>
-            <span>
-              {number} {ingredient}
-            </span>
-          </div>
-        ))}
+        </Button> */}
 
         {/* draggable ingredients fill inside the ingredients area */}
         <Ingredients />
 
-        <Mug id={Math.random() * 10} />
+        <div style={{ display: "flex" }}>
+          {/* show mug for each item in order */}
+          {currentOrder?.items.map((item) => (
+            <>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {/* mug icon */}
+                <Mug id={item.id} />
 
+                {/* item name */}
+                <p>{recipeMap[item.recipeId].name}</p>
+
+                {/* display chosen ingredients */}
+
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  {selectedIngredients[item.id] &&
+                    Object.entries(selectedIngredients[item.id]).map(
+                      ([ingredient, number]) => (
+                        <div>
+                          <span>
+                            {number} {ingredient}
+                          </span>
+                        </div>
+                      )
+                    )}
+                </div>
+                <div>{item.result}</div>
+              </div>
+            </>
+          ))}
+        </div>
         <Button onClick={() => handleCheckOrder()}>Complete</Button>
       </div>
     </DndContext>

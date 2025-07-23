@@ -1,7 +1,13 @@
 export type Ingredient = string;
 
+// export type SelectedIngredients = {
+//   [ingredient: Ingredient]: number;
+// };
+
 export type SelectedIngredients = {
-  [ingredient: Ingredient]: number;
+  [orderItemId: string]: {
+    [ingredient: Ingredient]: number;
+  };
 };
 
 export type Recipe = {
@@ -13,7 +19,13 @@ export type Recipe = {
   level: number; //earlier in the game, only pull low level recipes
 };
 
+export type OrderItem = {
+  id: string;
+  recipeId: number;
+  result: null | string;
+};
+
 export type Order = {
   id: string; //uuid
-  items: number[]; //recipe numbers - all items to make
+  items: OrderItem[]; //recipe numbers - all items to make
 };
