@@ -8,7 +8,7 @@ TO-DOs:
 
 - style game area, refactor as I add more components
   - make styled components instead of having so many divs with inline flexbox styling
-- create nicer images for ingredients and mug
+- create background images: cafe background, counter, etc
 - nicer recipe area that includes all recipes - button to toggle through them all
 - handle fail scenario - do we get rid of the ingredients? get a new order or let player try again?
   - throw away the ingredients - need a "clear" button of some kind
