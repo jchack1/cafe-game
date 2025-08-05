@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 //components
 import { Button } from "./components/ui/Button";
 import { Mug } from "./components/dragAndDrop/Mug";
-import { Ingredients } from "./components/dragAndDrop/Ingredients";
+import { IngredientShelf } from "./components/dragAndDrop/IngredientShelf";
 import { Counter } from "./components/cafe-items/Counter";
 import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
@@ -148,14 +148,27 @@ function App() {
             </div>
           )} */}
 
-          <Button onClick={() => handleGetOrder()}>Get order</Button>
+          <Button
+            onClick={() => handleGetOrder()}
+            style={{ alignSelf: "start" }}
+          >
+            Get order
+          </Button>
           {/* <Button onClick={() => setShowRecipe(!showRecipe)}>
             {showRecipe ? "Hide Recipe" : "Show Recipe"}
           </Button> */}
 
           {/* draggable ingredients fill inside the ingredients area */}
-          <Ingredients />
+          <IngredientShelf />
+
+          <Button
+            onClick={() => handleCheckOrder()}
+            style={{ alignSelf: "start" }}
+          >
+            Complete
+          </Button>
         </CafeWall>
+
         <Counter>
           {/* show mug for each item in order */}
           {currentOrder?.items.map((item) => (
@@ -185,7 +198,6 @@ function App() {
               </MugInfo>
             </>
           ))}
-          <Button onClick={() => handleCheckOrder()}>Complete</Button>
         </Counter>
       </div>
     </DndContext>

@@ -1,11 +1,33 @@
 import { useDraggable } from "@dnd-kit/core";
-import { Image } from "./Image";
+import styled from "styled-components";
 
-type IngredientProps = {
+type IngredientComponentProps = {
   ingredient: string;
 };
 
-export const Ingredient = ({ ingredient }: IngredientProps) => {
+const IngredientImage = styled.img`
+  margin: 10px;
+  width: ${(props) => props.width ?? "100px"};
+`;
+
+//need to specify size for each ingredient so the items look better on the shelf
+const ingredientWidthMap = {
+  espresso: "5vw",
+  drip: "12vw",
+  water: "12vw",
+  milk: "10vw",
+  chocolate: "8vw",
+};
+
+// const ingredientMinWidthMap = {
+//   espresso: "30px",
+//   drip: "90px",
+//   water: "90px",
+//   milk: "70px",
+//   chocolate: "55px",
+// };
+
+export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: ingredient,
   });
@@ -17,12 +39,13 @@ export const Ingredient = ({ ingredient }: IngredientProps) => {
     : undefined;
 
   return (
-    <Image
+    <IngredientImage
       src={`../../../images/coffee-items/${ingredient}.svg`}
       ref={setNodeRef}
       {...listeners}
       {...attributes}
       style={style}
+      width={ingredientWidthMap[ingredient]}
     />
   );
 };
