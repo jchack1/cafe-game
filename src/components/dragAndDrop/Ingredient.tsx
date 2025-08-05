@@ -18,7 +18,7 @@ export const Ingredient = ({ ingredient }: IngredientProps) => {
 
   return (
     <Image
-      src={`../../../svgs/${ingredient}.svg`}
+      src={`../../../images/coffee-items/${ingredient}.svg`}
       ref={setNodeRef}
       {...listeners}
       {...attributes}

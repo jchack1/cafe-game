@@ -8,5 +8,5 @@ export const Mug = ({ id }: { id: string }) => {
   });
 
   //mug area to drop ingredients
-  return <Image src="../../../svgs/mug.svg" ref={setNodeRef} />;
+  return <Image src="../../../images/coffee-items/mug.svg" ref={setNodeRef} />;
 };
