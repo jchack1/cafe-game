@@ -4,9 +4,12 @@ import { useState, useEffect } from "react";
 import { Button } from "./components/ui/Button";
 import { Mug } from "./components/dragAndDrop/Mug";
 import { Ingredients } from "./components/dragAndDrop/Ingredients";
+import { Counter } from "./components/cafe-items/Counter";
+import { MugInfo } from "./components/ui/containers/MugInfo";
+import { CafeWall } from "./components/ui/containers/CafeWall";
+import { Text } from "./components/ui/Text";
 //helpers/types
 import { recipeMap } from "./recipes";
-import "./App.css";
 import { generateOrder } from "./utils/generateOrder";
 import type { Recipe, Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
@@ -124,45 +127,45 @@ function App() {
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
         }}
       >
-        {/* show recipe name */}
-        {/* {currentRecipe?.name && <h1>{currentRecipe.name}</h1>} */}
+        <CafeWall>
+          {/* show recipe name */}
+          {/* {currentRecipe?.name && <h1>{currentRecipe.name}</h1>} */}
 
-        {/* if they choose to view it, show ingredients */}
-        {/* {showRecipe && currentRecipe && (
-          <div>
-            <p>Recipe</p>
+          {/* if they choose to view it, show ingredients */}
+          {/* {showRecipe && currentRecipe && (
+            <div>
+              <p>Recipe</p>
 
-            {Object.entries(currentRecipe.ingredients).map(
-              ([ingredient, number]) => (
-                <p>
-                  {number}x {ingredient}
-                </p>
-              )
-            )}
-          </div>
-        )} */}
+              {Object.entries(currentRecipe.ingredients).map(
+                ([ingredient, number]) => (
+                  <p>
+                    {number}x {ingredient}
+                  </p>
+                )
+              )}
+            </div>
+          )} */}
 
-        <Button onClick={() => handleGetOrder()}>Get order</Button>
-        {/* <Button onClick={() => setShowRecipe(!showRecipe)}>
-          {showRecipe ? "Hide Recipe" : "Show Recipe"}
-        </Button> */}
+          <Button onClick={() => handleGetOrder()}>Get order</Button>
+          {/* <Button onClick={() => setShowRecipe(!showRecipe)}>
+            {showRecipe ? "Hide Recipe" : "Show Recipe"}
+          </Button> */}
 
-        {/* draggable ingredients fill inside the ingredients area */}
-        <Ingredients />
-
-        <div style={{ display: "flex" }}>
+          {/* draggable ingredients fill inside the ingredients area */}
+          <Ingredients />
+        </CafeWall>
+        <Counter>
           {/* show mug for each item in order */}
           {currentOrder?.items.map((item) => (
             <>
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              <MugInfo>
                 {/* mug icon */}
                 <Mug id={item.id} />
 
                 {/* item name */}
-                <p>{recipeMap[item.recipeId].name}</p>
+                <Text>{recipeMap[item.recipeId].name}</Text>
 
                 {/* display chosen ingredients */}
 
@@ -171,19 +174,19 @@ function App() {
                     Object.entries(selectedIngredients[item.id]).map(
                       ([ingredient, number]) => (
                         <div>
-                          <span>
+                          <Text>
                             {number} {ingredient}
-                          </span>
+                          </Text>
                         </div>
                       )
                     )}
                 </div>
-                <div>{item.result}</div>
-              </div>
+                <p>{item.result}</p>
+              </MugInfo>
             </>
           ))}
-        </div>
-        <Button onClick={() => handleCheckOrder()}>Complete</Button>
+          <Button onClick={() => handleCheckOrder()}>Complete</Button>
+        </Counter>
       </div>
     </DndContext>
   );
