@@ -5,9 +5,19 @@ type IngredientComponentProps = {
   ingredient: string;
 };
 
-const IngredientImage = styled.img`
-  margin: 10px;
+//explicity give styled component prop type because typescript
+type IngredientImageProps = {
+  width?: string;
+  minWidth?: string;
+};
+
+const IngredientImage = styled.img<IngredientImageProps>`
+  margin: 10px 10px 2px;
   width: ${(props) => props.width ?? "100px"};
+
+  @media (max-width: 550px) {
+    width: ${(props) => props.minWidth ?? "40px"};
+  }
 `;
 
 //need to specify size for each ingredient so the items look better on the shelf
@@ -19,13 +29,13 @@ const ingredientWidthMap = {
   chocolate: "8vw",
 };
 
-// const ingredientMinWidthMap = {
-//   espresso: "30px",
-//   drip: "90px",
-//   water: "90px",
-//   milk: "70px",
-//   chocolate: "55px",
-// };
+const ingredientMinWidthMap = {
+  espresso: "30px",
+  drip: "80px",
+  water: "90px",
+  milk: "60px",
+  chocolate: "55px",
+};
 
 export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -46,6 +56,7 @@ export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
       {...attributes}
       style={style}
       width={ingredientWidthMap[ingredient]}
+      minWidth={ingredientMinWidthMap[ingredient]}
     />
   );
 };
