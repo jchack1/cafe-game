@@ -9,4 +9,12 @@ export const CafeWall = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  background-color: #fce5ee;
+  opacity: 1;
+  background-image: radial-gradient(#fb7fb3 1.25px, #fce5ee 1.25px);
+  background-size: 25px 25px;
 `;
+
+// helpful site for simple css backgrounds:
+// https://www.magicpattern.design/tools/css-backgrounds
