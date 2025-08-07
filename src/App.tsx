@@ -8,6 +8,7 @@ import { Counter } from "./components/cafe-items/Counter";
 import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
 import { Text } from "./components/ui/Text";
+import { RecipeBook } from "./components/cafe-items/RecipeBook";
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -27,7 +28,7 @@ function App() {
   const [currentOrder, setCurrentOrder] = useState<Order>();
   // const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
   const [level] = useState(1);
-  // const [showRecipe, setShowRecipe] = useState(false);
+  const [showRecipe, setShowRecipe] = useState(false);
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
 
@@ -131,33 +132,20 @@ function App() {
         }}
       >
         <CafeWall>
-          {/* show recipe name */}
-          {/* {currentRecipe?.name && <h1>{currentRecipe.name}</h1>} */}
-
-          {/* if they choose to view it, show ingredients */}
-          {/* {showRecipe && currentRecipe && (
-            <div>
-              <p>Recipe</p>
-
-              {Object.entries(currentRecipe.ingredients).map(
-                ([ingredient, number]) => (
-                  <p>
-                    {number}x {ingredient}
-                  </p>
-                )
-              )}
-            </div>
-          )} */}
-
           <Button
             onClick={() => handleGetOrder()}
             style={{ alignSelf: "start" }}
           >
             Get order
           </Button>
-          {/* <Button onClick={() => setShowRecipe(!showRecipe)}>
-            {showRecipe ? "Hide Recipe" : "Show Recipe"}
-          </Button> */}
+          <Button
+            onClick={() => setShowRecipe(!showRecipe)}
+            style={{ alignSelf: "start" }}
+          >
+            {showRecipe ? "Hide Recipes" : "Show Recipes"}
+          </Button>
+
+          {showRecipe && <RecipeBook />}
 
           {/* draggable ingredients fill inside the ingredients area */}
           <IngredientShelf />
