@@ -15,6 +15,7 @@ import type { Recipe, Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
 import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 /**
  *
@@ -122,7 +123,7 @@ function App() {
   }, []);
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
       <div
         style={{
           display: "flex",
