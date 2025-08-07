@@ -24,16 +24,16 @@ const IngredientImage = styled.img<IngredientImageProps>`
 const ingredientWidthMap = {
   espresso: "5vw",
   drip: "12vw",
-  water: "12vw",
-  milk: "10vw",
+  water: "14vw",
+  milk: "8vw",
   chocolate: "8vw",
 };
 
 const ingredientMinWidthMap = {
   espresso: "30px",
   drip: "80px",
-  water: "90px",
-  milk: "60px",
+  water: "100px",
+  milk: "50px",
   chocolate: "55px",
 };
 
