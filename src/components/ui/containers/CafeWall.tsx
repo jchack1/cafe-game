@@ -14,6 +14,8 @@ export const CafeWall = styled.div`
   opacity: 1;
   background-image: radial-gradient(#fb7fb3 1.25px, #fce5ee 1.25px);
   background-size: 25px 25px;
+
+  position: relative;
 `;
 
 // helpful site for simple css backgrounds:

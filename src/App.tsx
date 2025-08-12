@@ -12,7 +12,7 @@ import { RecipeBook } from "./components/cafe-items/RecipeBook";
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
-import type { Recipe, Order, SelectedIngredients, OrderItem } from "./types";
+import type { Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
 import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
@@ -145,7 +145,7 @@ function App() {
             {showRecipe ? "Hide Recipes" : "Show Recipes"}
           </Button>
 
-          {showRecipe && <RecipeBook />}
+          {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 
           {/* draggable ingredients fill inside the ingredients area */}
           <IngredientShelf />
