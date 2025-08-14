@@ -13,3 +13,90 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+/* success sparkle animation */
+/* derived from https://prismic.io/blog/css-animation-examples#6-sparkly-shiny-text */
+.success-message-container svg {
+  animation: sparkle 0.75s calc((var(--delay-step) * var(--d)) * 1s) both;
+  animation-iteration-count: infinite;
+  width: 30px;
+  position: absolute;
+}
+
+@keyframes sparkle {
+  50% {
+    transform: translate(-50%, -50%) scale(var(--s, 1));
+  }
+}
+
+/* makes stars go off in one direction - would be nice to make them go outwards from center */
+/* @keyframes sparkle {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+    transform: translate(calc(var(--x) * 1%), calc(var(--y) * 1%)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--x) * 2%), calc(var(--y) * 2%)) scale(0.5);
+  }
+} */
+
+.success-message-container svg {
+  --delay-step: 0.1;
+  top: calc(var(--y, 50) * 1%);
+  left: calc(var(--x, 0) * 1%);
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.success-message-container svg:nth-of-type(1) {
+  --x: 0;
+  --y: 20;
+  --s: 1.1;
+  --d: 1;
+}
+
+.success-message-container svg:nth-of-type(2) {
+  --x: 15;
+  --y: 80;
+  --s: 1.25;
+  --d: 2;
+}
+
+.success-message-container svg:nth-of-type(3) {
+  --x: 45;
+  --y: 40;
+  --s: 1.1;
+  --d: 3;
+}
+
+.success-message-container svg:nth-of-type(4) {
+  --x: 75;
+  --y: 60;
+  --s: 0.9;
+  --d: 4;
+}
+
+.success-message-container svg:nth-of-type(5) {
+  --x: 20;
+  --y: 30;
+  --s: 0.7;
+  --d: 5;
+}
+
+.success-message-container svg:nth-of-type(6) {
+  --x: 60;
+  --y: 80;
+  --s: 1.2;
+  --d: 6;
+}
+
+.success-message-container svg:nth-of-type(7) {
+  --x: 100;
+  --y: 50;
+  --s: 1.5;
+  --d: 7;
+}

@@ -9,6 +9,7 @@ import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
 import { Text } from "./components/ui/Text";
 import { RecipeBook } from "./components/cafe-items/RecipeBook";
+import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -29,6 +30,7 @@ function App() {
   // const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
   const [level] = useState(1);
   const [showRecipe, setShowRecipe] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
 
@@ -79,7 +81,12 @@ function App() {
         };
       });
     } else {
-      alert("Success!");
+      setShowSuccessMessage(true);
+
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 3000);
+
       setSelectedIngredients({});
       handleGetOrder();
     }
@@ -189,6 +196,8 @@ function App() {
           ))}
         </Counter>
       </div>
+
+      {showSuccessMessage && <SuccessMessage />}
     </DndContext>
   );
 }
