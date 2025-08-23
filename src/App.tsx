@@ -18,7 +18,7 @@ import { areObjectsEqual } from "./utils/areObjectsEqual";
 import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
-
+import { Howl } from "howler";
 /**
  *
  * @todo: major styling work
@@ -27,20 +27,25 @@ function App() {
   //state
 
   const [currentOrder, setCurrentOrder] = useState<Order>();
-  // const [currentRecipe, setCurrentRecipe] = useState<Recipe>(); //later on, will have multiple recipes to cycle through, but for now, just show current one
   const [level] = useState(1);
   const [showRecipe, setShowRecipe] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
 
+  //sound effects
+  const successSound = new Howl({
+    src: ["soundEffects/twinkle.mp3"],
+  });
+  const errorSound = new Howl({
+    src: ["soundEffects/error.mp3"],
+  });
   // handlers
 
   const handleGetOrder = () => {
     const newOrder = generateOrder(level);
 
     setCurrentOrder(newOrder);
-    // setCurrentRecipe(recipeMap[newOrder.items[0]]);
     setSelectedIngredients({});
   };
 
@@ -73,6 +78,7 @@ function App() {
     }
     if (orderFails.length > 0) {
       setCurrentOrder((prevOrder) => {
+        errorSound.play();
         if (!prevOrder) return prevOrder;
 
         return {
@@ -82,7 +88,7 @@ function App() {
       });
     } else {
       setShowSuccessMessage(true);
-
+      successSound.play();
       setTimeout(() => {
         setShowSuccessMessage(false);
       }, 3000);
