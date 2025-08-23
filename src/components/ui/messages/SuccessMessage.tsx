@@ -9,11 +9,11 @@ const SuccessText = styled.p`
   font-family: Indie Flower, cursive;
 `;
 const MessageContainer = styled.div`
-  transform: translate(-50%, -50%) scale(var(--s, 1));
+  transform: translate(-50%, -50%);
   position: absolute;
+  display: inline-block;
   top: 50%;
   left: 50%;
-  display: inline-block;
 `;
 
 const messages: string[] = [
