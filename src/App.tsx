@@ -50,13 +50,33 @@ function App() {
   };
 
   const handleCheckOrder = () => {
+    if (!currentOrder) return;
+
     const orderSuccesses: OrderItem[] = [];
     const orderFails: OrderItem[] = [];
 
-    for (const [orderItemId, selected] of Object.entries(selectedIngredients)) {
-      const orderItem = currentOrder?.items.find(
-        (item) => item.id === orderItemId
-      );
+    const selectedIngredientsArr = Object.entries(selectedIngredients);
+
+    if (selectedIngredientsArr.length === 0) {
+      alert("fail - you didn't make any drinks");
+
+      errorSound.play();
+
+      return;
+    }
+
+    for (const orderItem of currentOrder.items) {
+      const orderIngredients = selectedIngredients[orderItem.id];
+
+      if (!orderIngredients) {
+        orderFails.push({
+          ...orderItem,
+          result: `fail! you didn't make the ${
+            recipeMap[orderItem.recipeId].name
+          }`,
+        });
+        continue;
+      }
 
       if (!orderItem) {
         alert("error!");
@@ -64,7 +84,7 @@ function App() {
       }
       const recipeIngredients = recipeMap[orderItem.recipeId].ingredients;
 
-      if (areObjectsEqual(selected, recipeIngredients)) {
+      if (areObjectsEqual(orderIngredients, recipeIngredients)) {
         orderSuccesses.push({
           ...orderItem,
           result: "success!",
@@ -196,7 +216,7 @@ function App() {
                       )
                     )}
                 </div>
-                <p>{item.result}</p>
+                <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
               </MugInfo>
             </>
           ))}
