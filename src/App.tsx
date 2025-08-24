@@ -19,6 +19,7 @@ import { DndContext } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
+import { motion, AnimatePresence } from "motion/react";
 /**
  *
  * @todo: major styling work
@@ -192,34 +193,50 @@ function App() {
         </CafeWall>
 
         <Counter>
-          {/* show mug for each item in order */}
-          {currentOrder?.items.map((item) => (
-            <>
-              <MugInfo>
-                {/* mug icon */}
-                <Mug id={item.id} />
+          <AnimatePresence initial={false}>
+            <motion.div
+              initial={{ x: "-100%", opacity: 0 }}
+              animate={{ x: "0%", opacity: 1 }}
+              transition={{ duration: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              key={currentOrder?.id ?? "mug-div"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              {/* show mug for each item in order */}
+              {currentOrder?.items.map((item) => (
+                <>
+                  <MugInfo>
+                    {/* mug icon */}
+                    <Mug id={item.id} />
 
-                {/* item name */}
-                <Text>{recipeMap[item.recipeId].name}</Text>
+                    {/* item name */}
+                    <Text>{recipeMap[item.recipeId].name}</Text>
 
-                {/* display chosen ingredients */}
+                    {/* display chosen ingredients */}
 
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {selectedIngredients[item.id] &&
-                    Object.entries(selectedIngredients[item.id]).map(
-                      ([ingredient, number]) => (
-                        <div>
-                          <Text>
-                            {number} {ingredient}
-                          </Text>
-                        </div>
-                      )
-                    )}
-                </div>
-                <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
-              </MugInfo>
-            </>
-          ))}
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      {selectedIngredients[item.id] &&
+                        Object.entries(selectedIngredients[item.id]).map(
+                          ([ingredient, number]) => (
+                            <div>
+                              <Text>
+                                {number} {ingredient}
+                              </Text>
+                            </div>
+                          )
+                        )}
+                    </div>
+                    <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
+                  </MugInfo>
+                </>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </Counter>
       </div>
 
