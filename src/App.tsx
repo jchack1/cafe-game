@@ -51,13 +51,14 @@ function App() {
   };
 
   const handleCheckOrder = () => {
-    if (!currentOrder) return;
+    if (!currentOrder || !currentOrder.items.length) return;
 
     const orderSuccesses: OrderItem[] = [];
     const orderFails: OrderItem[] = [];
 
     const selectedIngredientsArr = Object.entries(selectedIngredients);
 
+    //if no ingredients in any cups, fail
     if (selectedIngredientsArr.length === 0) {
       alert("fail - you didn't make any drinks");
 
@@ -69,6 +70,7 @@ function App() {
     for (const orderItem of currentOrder.items) {
       const orderIngredients = selectedIngredients[orderItem.id];
 
+      //if user didn't put ingredients in the cup, that item is a fail
       if (!orderIngredients) {
         orderFails.push({
           ...orderItem,
@@ -79,10 +81,7 @@ function App() {
         continue;
       }
 
-      if (!orderItem) {
-        alert("error!");
-        return;
-      }
+      //get required ingredients for this order item, compare what was selected
       const recipeIngredients = recipeMap[orderItem.recipeId].ingredients;
 
       if (areObjectsEqual(orderIngredients, recipeIngredients)) {
@@ -97,6 +96,7 @@ function App() {
         });
       }
     }
+
     if (orderFails.length > 0) {
       setCurrentOrder((prevOrder) => {
         errorSound.play();
@@ -110,10 +110,12 @@ function App() {
     } else {
       setShowSuccessMessage(true);
       successSound.play();
+
       setTimeout(() => {
         setShowSuccessMessage(false);
       }, 3000);
 
+      //reset for next order
       setSelectedIngredients({});
       handleGetOrder();
     }
@@ -193,14 +195,20 @@ function App() {
         </CafeWall>
 
         <Counter>
+          {/* animate mugs going off screen on complete, on screen when new order comes in */}
           <AnimatePresence initial={false}>
             <motion.div
               initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: "0%", opacity: 1 }}
               transition={{ duration: 1 }}
               exit={{ x: "100%", opacity: 0 }}
-              key={currentOrder?.id ?? "mug-div"}
+              key={currentOrder?.id ? `mug-div-${currentOrder?.id}` : "mug-div"}
               style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -209,31 +217,29 @@ function App() {
             >
               {/* show mug for each item in order */}
               {currentOrder?.items.map((item) => (
-                <>
-                  <MugInfo>
-                    {/* mug icon */}
-                    <Mug id={item.id} />
+                <MugInfo>
+                  {/* mug icon */}
+                  <Mug id={item.id} />
 
-                    {/* item name */}
-                    <Text>{recipeMap[item.recipeId].name}</Text>
+                  {/* item name */}
+                  <Text>{recipeMap[item.recipeId].name}</Text>
 
-                    {/* display chosen ingredients */}
+                  {/* display chosen ingredients */}
 
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      {selectedIngredients[item.id] &&
-                        Object.entries(selectedIngredients[item.id]).map(
-                          ([ingredient, number]) => (
-                            <div>
-                              <Text>
-                                {number} {ingredient}
-                              </Text>
-                            </div>
-                          )
-                        )}
-                    </div>
-                    <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
-                  </MugInfo>
-                </>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    {selectedIngredients[item.id] &&
+                      Object.entries(selectedIngredients[item.id]).map(
+                        ([ingredient, number]) => (
+                          <div>
+                            <Text>
+                              {number} {ingredient}
+                            </Text>
+                          </div>
+                        )
+                      )}
+                  </div>
+                  <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
+                </MugInfo>
               ))}
             </motion.div>
           </AnimatePresence>

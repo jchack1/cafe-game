@@ -45,6 +45,7 @@ export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 1, //these must be higher than absolutely positioned counter/mugs
       }
     : undefined;
 
