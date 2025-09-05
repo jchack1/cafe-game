@@ -1,5 +1,5 @@
 //hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 //components
 import { Button } from "./components/ui/Button";
 import { Mug } from "./components/dragAndDrop/Mug";
@@ -16,7 +16,7 @@ import { generateOrder } from "./utils/generateOrder";
 import type { Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
 import { DndContext } from "@dnd-kit/core";
-import type { DragEndEvent } from "@dnd-kit/core";
+import type { DragOverEvent, UniqueIdentifier } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
@@ -33,6 +33,8 @@ function App() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
+  const dragIntervalId = useRef<number | null>(null);
+  const currentOverId = useRef<UniqueIdentifier | null>(null);
 
   //sound effects
   const successSound = new Howl({
@@ -121,36 +123,61 @@ function App() {
     }
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    if (event.over) {
-      const orderItemId = event.over.id;
-      const currentIngredient = event.active.id;
+  //add ingredients into the cup, for as long as that ingredient is hovered over the cup
+  //ever X amount of time add one more until they move ingredient away
+  const handleDragOver = (event: DragOverEvent) => {
+    //keep track of the cup we're currently hovering over
+    const overId = event.over?.id ?? null;
 
-      setSelectedIngredients((prevSelection) => {
-        const updatedSelection = { ...prevSelection };
+    // if we switched cups or dragged away from all cups, clear old interval, and update currentOverId
+    if (currentOverId.current !== overId) {
+      if (dragIntervalId.current) {
+        clearInterval(dragIntervalId.current);
+        dragIntervalId.current = null;
+      }
+      currentOverId.current = overId;
+    }
 
-        //check if we've added ingredients to this order item yet
-        const currentOrderItem = updatedSelection[orderItemId];
+    //if we're over a cup, and there is no interval, start new interval (meaning, start adding ingredients to the cup as long as they're hovered over it)
+    if (overId && !dragIntervalId.current) {
+      dragIntervalId.current = setInterval(() => {
+        const orderItemId = overId;
+        const currentIngredient = event.active.id;
 
-        //if we haven't, create the order item object in state and add current ingredient
-        if (!currentOrderItem) {
-          updatedSelection[orderItemId] = {
-            [currentIngredient]: 1,
-          };
-          //if not, find the current item and increment current ingredient
-        } else {
-          const updatedOrderItem = {
-            ...currentOrderItem,
-            [currentIngredient]: currentOrderItem[currentIngredient]
-              ? currentOrderItem[currentIngredient] + 1
-              : 1,
-          };
+        setSelectedIngredients((prevSelection) => {
+          const updatedSelection = { ...prevSelection };
 
-          updatedSelection[orderItemId] = updatedOrderItem;
-        }
+          //check if we've added ingredients to this order item yet
+          const currentOrderItem = updatedSelection[orderItemId];
 
-        return updatedSelection;
-      });
+          //if we haven't, create the order item object in state and add current ingredient
+          if (!currentOrderItem) {
+            updatedSelection[orderItemId] = {
+              [currentIngredient]: 1,
+            };
+            //if not, find the current item and increment current ingredient
+          } else {
+            const updatedOrderItem = {
+              ...currentOrderItem,
+              [currentIngredient]: currentOrderItem[currentIngredient]
+                ? currentOrderItem[currentIngredient] + 1
+                : 1,
+            };
+
+            updatedSelection[orderItemId] = updatedOrderItem;
+          }
+
+          return updatedSelection;
+        });
+      }, 700);
+    }
+  };
+
+  //always clear interval whenever we stop dragging
+  const handleDragEnd = () => {
+    if (dragIntervalId.current) {
+      clearInterval(dragIntervalId.current);
+      dragIntervalId.current = null;
     }
   };
 
@@ -160,7 +187,12 @@ function App() {
   }, []);
 
   return (
-    <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
+    // <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
+    <DndContext
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToWindowEdges]}
+    >
       <div
         style={{
           display: "flex",
