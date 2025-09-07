@@ -10,6 +10,7 @@ import { CafeWall } from "./components/ui/containers/CafeWall";
 import { Text } from "./components/ui/Text";
 import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
+import { FailMessage } from "./components/ui/messages/FailMessage";
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -28,9 +29,13 @@ function App() {
   //state
 
   const [currentOrder, setCurrentOrder] = useState<Order>();
-  const [level] = useState(1);
-  const [showRecipe, setShowRecipe] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [level] = useState<number>(1);
+  const [showRecipe, setShowRecipe] = useState<boolean>(false);
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [showFailMessage, setShowFailMessage] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
   const dragIntervalId = useRef<number | null>(null);
@@ -62,7 +67,14 @@ function App() {
 
     //if no ingredients in any cups, fail
     if (selectedIngredientsArr.length === 0) {
-      alert("fail - you didn't make any drinks");
+      // alert("fail - you didn't make any drinks");
+      setShowFailMessage(true);
+      setFailMessage("You didn't make any drinks...");
+
+      setTimeout(() => {
+        setShowFailMessage(false);
+        setFailMessage(null);
+      }, 3000);
 
       errorSound.play();
 
@@ -101,7 +113,13 @@ function App() {
 
     if (orderFails.length > 0) {
       setCurrentOrder((prevOrder) => {
+        setShowFailMessage(true);
         errorSound.play();
+
+        setTimeout(() => {
+          setShowFailMessage(false);
+        }, 3000);
+
         if (!prevOrder) return prevOrder;
 
         return {
@@ -279,6 +297,7 @@ function App() {
       </div>
 
       {showSuccessMessage && <SuccessMessage />}
+      {showFailMessage && <FailMessage message={failMessage} />}
     </DndContext>
   );
 }
