@@ -48,6 +48,7 @@ function App() {
   const errorSound = new Howl({
     src: ["soundEffects/error.mp3"],
   });
+
   // handlers
 
   const handleGetOrder = () => {
@@ -142,7 +143,7 @@ function App() {
   };
 
   //add ingredients into the cup, for as long as that ingredient is hovered over the cup
-  //ever X amount of time add one more until they move ingredient away
+  //every X amount of time add one more until they move ingredient away
   const handleDragOver = (event: DragOverEvent) => {
     //keep track of the cup we're currently hovering over
     const overId = event.over?.id ?? null;
