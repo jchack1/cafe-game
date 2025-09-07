@@ -33,7 +33,7 @@ const messages: string[] = [
 ];
 
 //if message included, display that, otherwise randomly choose a preset message
-export const FailMessage = ({ message = null }) => {
+export const FailMessage = ({ message }: { message: string | null }) => {
   const randomIndex = Math.floor(Math.random() * messages.length);
 
   return (
