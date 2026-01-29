@@ -16,7 +16,13 @@ import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
 import type { Order, SelectedIngredients, OrderItem } from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
-import { DndContext } from "@dnd-kit/core";
+import {
+  DndContext,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import type { DragOverEvent, UniqueIdentifier } from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
@@ -41,6 +47,12 @@ function App() {
   const dragIntervalId = useRef<number | null>(null);
   const currentOverId = useRef<UniqueIdentifier | null>(null);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 10, tolerance: 5 },
+    }),
+  );
   //sound effects
   const successSound = new Howl({
     src: ["soundEffects/twinkle.mp3"],
@@ -211,6 +223,7 @@ function App() {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       modifiers={[restrictToWindowEdges]}
+      sensors={sensors}
     >
       <div
         style={{
@@ -286,7 +299,7 @@ function App() {
                               {number} {ingredient}
                             </Text>
                           </div>
-                        )
+                        ),
                       )}
                   </div>
                   <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
