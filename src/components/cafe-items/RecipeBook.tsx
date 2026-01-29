@@ -93,7 +93,7 @@ export const RecipeBook = ({
 
         {Object.entries(recipes[currentRecipeIndex].ingredients).map(
           ([ingredient, number]) => (
-            <p>
+            <p key={`${number}-${ingredient}`}>
               {number} {ingredient}
             </p>
           ),

@@ -281,7 +281,7 @@ function App() {
             >
               {/* show mug for each item in order */}
               {currentOrder?.items.map((item) => (
-                <MugInfo>
+                <MugInfo key={`mug-info-${item.id}`}>
                   {/* mug icon */}
                   <Mug id={item.id} />
 
@@ -294,7 +294,7 @@ function App() {
                     {selectedIngredients[item.id] &&
                       Object.entries(selectedIngredients[item.id]).map(
                         ([ingredient, number]) => (
-                          <div>
+                          <div key={`chosen-${number}-${ingredient}`}>
                             <Text>
                               {number} {ingredient}
                             </Text>

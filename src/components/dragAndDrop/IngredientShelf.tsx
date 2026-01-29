@@ -54,7 +54,7 @@ export const IngredientShelf = () => {
         <div key={index}>
           <IngredientRow>
             {chunk.map((ingredient) => (
-              <Ingredient ingredient={ingredient} />
+              <Ingredient ingredient={ingredient} key={ingredient} />
             ))}
           </IngredientRow>
 
