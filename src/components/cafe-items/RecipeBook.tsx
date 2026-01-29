@@ -2,6 +2,7 @@ import { recipes } from "../../recipes";
 import { useState } from "react";
 import styled from "styled-components";
 import SmallButton from "../ui/SmallButton";
+import { Howl } from "howler";
 
 const RecipePage = styled.div`
   width: 200px;
@@ -16,7 +17,9 @@ const RecipePage = styled.div`
   top: 10px;
   right: 10px;
 
-  font-family: Indie Flower, cursive;
+  font-family:
+    Indie Flower,
+    cursive;
 `;
 
 const RecipeTitle = styled.p`
@@ -36,6 +39,10 @@ export const RecipeBook = ({
   setShowRecipe: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState<number>(0);
+
+  const turnPageSound = new Howl({
+    src: ["soundEffects/turnpage.mp3"],
+  });
 
   return (
     <RecipePage>
@@ -59,7 +66,10 @@ export const RecipeBook = ({
 
       {/* previous */}
       <SmallButton
-        onClick={() => setCurrentRecipeIndex(currentRecipeIndex - 1)}
+        onClick={() => {
+          setCurrentRecipeIndex(currentRecipeIndex - 1);
+          turnPageSound.play();
+        }}
         disabled={currentRecipeIndex === 0}
       >
         <svg
@@ -86,14 +96,17 @@ export const RecipeBook = ({
             <p>
               {number} {ingredient}
             </p>
-          )
+          ),
         )}
       </div>
 
       {/* next */}
 
       <SmallButton
-        onClick={() => setCurrentRecipeIndex(currentRecipeIndex + 1)}
+        onClick={() => {
+          setCurrentRecipeIndex(currentRecipeIndex + 1);
+          turnPageSound.play();
+        }}
         disabled={currentRecipeIndex === recipes.length - 1}
       >
         <svg
