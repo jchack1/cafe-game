@@ -11,6 +11,7 @@ import { Text } from "./components/ui/Text";
 import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
 import { FailMessage } from "./components/ui/messages/FailMessage";
+import { TrashCan } from "./components/dragAndDrop/TrashCan";
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -23,13 +24,17 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import type { DragOverEvent, UniqueIdentifier } from "@dnd-kit/core";
+import type {
+  DragOverEvent,
+  UniqueIdentifier,
+  DragEndEvent,
+} from "@dnd-kit/core";
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
 /**
  *
- * @todo: major styling work
+ * @todo: major styling work; re-organize code
  */
 function App() {
   //state
@@ -59,6 +64,9 @@ function App() {
   });
   const errorSound = new Howl({
     src: ["soundEffects/error.mp3"],
+  });
+  const emptyMugSound = new Howl({
+    src: ["soundEffects/liquid-splash.mp3"],
   });
 
   // handlers
@@ -157,8 +165,17 @@ function App() {
   //add ingredients into the cup, for as long as that ingredient is hovered over the cup
   //every X amount of time add one more until they move ingredient away
   const handleDragOver = (event: DragOverEvent) => {
-    //keep track of the cup we're currently hovering over
-    const overId = event.over?.id ?? null;
+    const overItem = event.over;
+    const activeItem = event.active;
+    //keep track of the cup/droppable area we're currently hovering over
+    const overId = overItem?.id ?? null;
+    const activeId = activeItem?.id ?? null;
+
+    const overType = overItem?.data?.current?.type;
+    const activeType = activeItem?.data?.current?.type;
+
+    //can't drag item over itself
+    if (overId === activeId || overType === activeType) return;
 
     // if we switched cups or dragged away from all cups, clear old interval, and update currentOverId
     if (currentOverId.current !== overId) {
@@ -200,12 +217,38 @@ function App() {
 
           return updatedSelection;
         });
-      }, 700);
+      }, 400);
     }
   };
 
   //always clear interval whenever we stop dragging
-  const handleDragEnd = () => {
+  const handleDragEnd = (event: DragEndEvent) => {
+    const overId = event.over?.id ?? null;
+    const activeItem = event.active;
+
+    // if mug is dragged over trash area, get rid of ingredients
+    // this could be its own function
+    if (
+      overId === "trash" &&
+      activeItem?.data?.current?.type === "mug" &&
+      activeItem?.id &&
+      selectedIngredients[activeItem.id] &&
+      Object.keys(selectedIngredients[activeItem.id]).length > 0
+    ) {
+      //remove ingredients
+      setSelectedIngredients((prev) => {
+        const updatedSelection = { ...prev };
+
+        updatedSelection[activeItem.id] = {};
+
+        return updatedSelection;
+      });
+
+      //todo: remove fail message, if it exists, from item in order
+
+      emptyMugSound.play();
+    }
+
     if (dragIntervalId.current) {
       clearInterval(dragIntervalId.current);
       dragIntervalId.current = null;
@@ -218,7 +261,6 @@ function App() {
   }, []);
 
   return (
-    // <DndContext onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
     <DndContext
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
@@ -307,6 +349,7 @@ function App() {
               ))}
             </motion.div>
           </AnimatePresence>
+          <TrashCan />
         </Counter>
       </div>
 

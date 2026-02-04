@@ -40,6 +40,9 @@ const ingredientMinWidthMap = {
 export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: ingredient,
+    data: {
+      type: "ingredient",
+    },
   });
 
   const style = transform
