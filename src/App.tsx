@@ -12,6 +12,9 @@ import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
 import { FailMessage } from "./components/ui/messages/FailMessage";
 import { TrashCan } from "./components/dragAndDrop/TrashCan";
+import { XSVG } from "./components/svgs/XSVG";
+//ingredient icons
+
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -32,6 +35,7 @@ import type {
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
+import { CheckSVG } from "./components/svgs/CheckSVG";
 /**
  *
  * @todo: major styling work; re-organize code
@@ -122,12 +126,12 @@ function App() {
       if (areObjectsEqual(orderIngredients, recipeIngredients)) {
         orderSuccesses.push({
           ...orderItem,
-          result: "success!",
+          result: "success",
         });
       } else {
         orderFails.push({
           ...orderItem,
-          result: "fail!",
+          result: "fail",
         });
       }
     }
@@ -327,24 +331,49 @@ function App() {
                   {/* mug icon */}
                   <Mug id={item.id} />
 
-                  {/* item name */}
-                  <Text>{recipeMap[item.recipeId].name}</Text>
+                  {/* item name, and result*/}
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Text>{recipeMap[item.recipeId].name}</Text>
+                    {item.result === "success" ? (
+                      <div>
+                        <CheckSVG colour={"#1fff35"} width={"2rem"} />
+                      </div>
+                    ) : item.result === "fail" && showFailMessage ? (
+                      <XSVG colour={"#ff1f1f"} width={"2rem"} />
+                    ) : null}
+                  </div>
 
-                  {/* display chosen ingredients */}
+                  {/* display chosen ingredients as icons*/}
 
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {selectedIngredients[item.id] &&
-                      Object.entries(selectedIngredients[item.id]).map(
+                  {Object.entries(selectedIngredients[item.id] ?? {}).length >
+                    0 && (
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "6px",
+                        alignItems: "center",
+                        backgroundColor: "pink",
+                        padding: "4px",
+                      }}
+                    >
+                      {Object.entries(selectedIngredients[item.id]).map(
                         ([ingredient, number]) => (
-                          <div key={`chosen-${number}-${ingredient}`}>
-                            <Text>
-                              {number} {ingredient}
-                            </Text>
+                          <div
+                            key={`chosen-${ingredient}`}
+                            style={{ position: "relative" }}
+                          >
+                            {number}
+                            <img
+                              src={`/images/coffee-items/${ingredient}.svg`}
+                              alt={ingredient}
+                              width={18}
+                              height={18}
+                            />
                           </div>
                         ),
                       )}
-                  </div>
-                  <p style={{ color: "#ff9b9bff" }}>{item.result}</p>
+                    </div>
+                  )}
                 </MugInfo>
               ))}
             </motion.div>

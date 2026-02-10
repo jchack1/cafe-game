@@ -4,7 +4,7 @@ import styled from "styled-components";
 //mugs positioned relative to counter so they animate across the screen properly - had issue with them showing up initially at the bottom of the screen, then jumping up once initial animation complete.
 const CounterBackground = styled.div`
   width: 100vw;
-  height: 40vh;
+  height: 50vh;
   margin: 0;
   overflow-x: hidden;
 

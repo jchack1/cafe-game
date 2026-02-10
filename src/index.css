@@ -1,5 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap");
 
+html {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 0.75rem;
+  }
+}
+
 body {
   margin: 0;
   display: flex;
@@ -111,8 +127,8 @@ h1 {
 }
 
 .trash-icon {
-  width: 50px;
-  transform: translateY(30%);
+  width: 40px;
+  transform: translateY(40%);
   transition: all 0.25s ease-in-out;
 }
 
