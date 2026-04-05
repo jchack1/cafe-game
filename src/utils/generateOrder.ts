@@ -8,7 +8,7 @@ export const generateOrder = (level: number): Order => {
   //get a random recipe from recipes file
   const recipesForLevel = recipes.filter((recipe) => recipe.level === level);
 
-  const randomNumberOfItems = Math.floor(Math.random() * 4) + 1;
+  const randomNumberOfItems = Math.floor(Math.random() * 6) + 1;
 
   const randomItems: OrderItem[] = Array.from(
     { length: randomNumberOfItems },
@@ -18,7 +18,7 @@ export const generateOrder = (level: number): Order => {
         id: uuidv4(),
         recipeId: Math.floor(Math.random() * recipesForLevel.length + 1),
       };
-    }
+    },
   );
 
   const newOrder: Order = {
