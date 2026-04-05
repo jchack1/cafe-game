@@ -6,7 +6,6 @@ const CounterBackground = styled.div`
   width: 100vw;
   height: 50vh;
   margin: 0;
-  overflow-x: hidden;
 
   background-image: url("../../../images/background-items/Wood-Grain.JPG");
   background-size: cover;
