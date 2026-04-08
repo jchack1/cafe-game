@@ -1,5 +1,10 @@
 //this component is where the mugs are placed
 import styled from "styled-components";
+import type { ReactNode } from "react";
+
+type CounterProps = {
+  children?: ReactNode;
+};
 
 //mugs positioned relative to counter so they animate across the screen properly - had issue with them showing up initially at the bottom of the screen, then jumping up once initial animation complete.
 const CounterBackground = styled.div`
@@ -12,9 +17,9 @@ const CounterBackground = styled.div`
   background-repeat: no-repeat;
 
   position: relative;
-  overflow: hidden;
+  // overflow: hidden;
 `;
 
-export const Counter = ({ children, ...props }) => {
+export const Counter = ({ children, ...props }: CounterProps) => {
   return <CounterBackground {...props}>{children}</CounterBackground>;
 };

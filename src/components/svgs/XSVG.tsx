@@ -1,4 +1,9 @@
-export const XSVG = ({ colour, width }) => {
+type XSVGProps = {
+  colour?: string;
+  width?: number;
+};
+
+export const XSVG = ({ colour = "#000", width = 640 }: XSVGProps) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width={width}>
       <path

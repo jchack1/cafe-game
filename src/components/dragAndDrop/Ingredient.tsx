@@ -1,8 +1,9 @@
 import { useDraggable } from "@dnd-kit/core";
 import styled from "styled-components";
+import type { Ingredient as IngredientType } from "../../types";
 
 type IngredientComponentProps = {
-  ingredient: string;
+  ingredient: IngredientType;
 };
 
 //explicity give styled component prop type because typescript
@@ -21,7 +22,7 @@ const IngredientImage = styled.img<IngredientImageProps>`
 `;
 
 //need to specify size for each ingredient so the items look better on the shelf
-const ingredientWidthMap = {
+const ingredientWidthMap: Record<string, string> = {
   espresso: "5vw",
   drip: "12vw",
   water: "14vw",
@@ -29,7 +30,7 @@ const ingredientWidthMap = {
   chocolate: "8vw",
 };
 
-const ingredientMinWidthMap = {
+const ingredientMinWidthMap: Record<string, string> = {
   espresso: "30px",
   drip: "80px",
   water: "100px",

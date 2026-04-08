@@ -1,4 +1,11 @@
 import styled from "styled-components";
+import type { ReactNode } from "react";
+
+type SmallButtonProps = {
+  children?: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+};
 
 const IconButton = styled.button`
   padding: 10px;
@@ -22,7 +29,7 @@ const IconButton = styled.button`
   }
 `;
 
-const SmallButton = ({ children, onClick, disabled }) => {
+const SmallButton = ({ children, onClick, disabled }: SmallButtonProps) => {
   return (
     <IconButton onClick={onClick} disabled={disabled}>
       {children}

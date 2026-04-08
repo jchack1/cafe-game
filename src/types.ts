@@ -6,7 +6,7 @@ export type Ingredient = string;
 
 export type SelectedIngredients = {
   [orderItemId: string]: {
-    [ingredient: Ingredient]: number;
+    [ingredient: string]: number;
   };
 };
 
@@ -14,7 +14,7 @@ export type Recipe = {
   id: number;
   name: string;
   ingredients: {
-    [ingredient: Ingredient]: number;
+    [ingredient: string]: number;
   };
   level: number; //earlier in the game, only pull low level recipes
 };

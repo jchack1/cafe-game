@@ -203,7 +203,7 @@ function App() {
     if (overId && !dragIntervalId.current) {
       dragIntervalId.current = setInterval(() => {
         const orderItemId = overId;
-        const currentIngredient = event.active.id;
+        const currentIngredient = event.active.id as string;
 
         setSelectedIngredients((prevSelection) => {
           const updatedSelection = { ...prevSelection };
@@ -218,11 +218,10 @@ function App() {
             };
             //if not, find the current item and increment current ingredient
           } else {
+            const currentCount = currentOrderItem[currentIngredient] ?? 0;
             const updatedOrderItem = {
               ...currentOrderItem,
-              [currentIngredient]: currentOrderItem[currentIngredient]
-                ? currentOrderItem[currentIngredient] + 1
-                : 1,
+              [currentIngredient]: currentCount + 1,
             };
 
             updatedSelection[orderItemId] = updatedOrderItem;
@@ -252,7 +251,10 @@ function App() {
       setSelectedIngredients((prev) => {
         const updatedSelection = { ...prev };
 
-        updatedSelection[activeItem.id] = {};
+        const itemId = activeItem.id as string;
+        if (itemId && updatedSelection[itemId]) {
+          updatedSelection[itemId] = {};
+        }
 
         return updatedSelection;
       });
@@ -415,10 +417,12 @@ function App() {
                     <Text>{recipeMap[item.recipeId].name}</Text>
                     {item.result === "success" ? (
                       <div>
-                        <CheckSVG colour={"#1fff35"} width={"2rem"} />
+                        <CheckSVG colour={"#1fff35"} width={32} />
                       </div>
                     ) : item.result === "fail" && showFailMessage ? (
-                      <XSVG colour={"#ff1f1f"} width={"2rem"} />
+                      <div>
+                        <XSVG colour={"#ff1f1f"} width={32} />
+                      </div>
                     ) : null}
                   </div>
 
@@ -435,8 +439,9 @@ function App() {
                         padding: "4px",
                       }}
                     >
-                      {Object.entries(selectedIngredients[item.id]).map(
-                        ([ingredient, number]) => (
+                      {selectedIngredients[item.id] &&
+                        Object.entries(selectedIngredients[item.id]).map(
+                          ([ingredient, number]) => (
                           <div
                             key={`chosen-${ingredient}`}
                             style={{ position: "relative" }}

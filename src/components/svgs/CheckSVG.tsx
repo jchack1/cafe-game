@@ -1,4 +1,9 @@
-export const CheckSVG = ({ colour, width }) => {
+type CheckSVGProps = {
+  colour?: string;
+  width?: number;
+};
+
+export const CheckSVG = ({ colour = "#000", width = 640 }: CheckSVGProps) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width={width}>
       <path

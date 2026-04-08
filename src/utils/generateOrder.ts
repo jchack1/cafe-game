@@ -17,6 +17,7 @@ export const generateOrder = (level: number): Order => {
       return {
         id: uuidv4(),
         recipeId: Math.floor(Math.random() * recipesForLevel.length + 1),
+        result: null,
       };
     },
   );

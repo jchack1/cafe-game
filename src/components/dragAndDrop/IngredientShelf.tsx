@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { ingredients } from "../../recipes";
 import { Ingredient } from "./Ingredient";
+import type { Ingredient as IngredientType } from "../../types";
 
 const IngredientRow = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const IngredientShelfContainer = styled.div`
 `;
 
 export const IngredientShelf = () => {
-  const [chunkedIngredients, setChunkedIngredients] = useState<string[][]>([
+  const [chunkedIngredients, setChunkedIngredients] = useState<IngredientType[][]>([
     ingredients,
   ]);
 
