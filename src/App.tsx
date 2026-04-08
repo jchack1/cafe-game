@@ -36,6 +36,8 @@ import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckSVG } from "./components/svgs/CheckSVG";
+import { useSwipeRight } from "./hooks/useSwipeRight";
+
 /**
  *
  * @todo: major styling work; re-organize code
@@ -50,6 +52,13 @@ function App() {
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
   const [showFailMessage, setShowFailMessage] = useState<boolean>(false);
   const [failMessage, setFailMessage] = useState<string | null>(null);
+
+  const [isSwipingAway, setIsSwipingAway] = useState<boolean>(false);
+  const [isTouch, setIsTouch] = useState(() => {
+    if (typeof window === "undefined") return false;
+
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  });
 
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
@@ -258,10 +267,61 @@ function App() {
       dragIntervalId.current = null;
     }
   };
+  const handleSwipeComplete = () => {
+    if (!currentOrder) return;
+
+    const hasErrors = (() => {
+      const selectedIngredientsArr = Object.entries(selectedIngredients);
+      if (selectedIngredientsArr.length === 0) return true;
+
+      return currentOrder.items.some((orderItem) => {
+        const orderIngredients = selectedIngredients[orderItem.id];
+        if (!orderIngredients) return true;
+
+        const recipeIngredients = recipeMap[orderItem.recipeId].ingredients;
+        return !areObjectsEqual(orderIngredients, recipeIngredients);
+      });
+    })();
+
+    if (hasErrors) {
+      handleCheckOrder();
+      return;
+    }
+
+    setIsSwipingAway(true);
+
+    setTimeout(() => {
+      handleCheckOrder();
+      setIsSwipingAway(false);
+    }, 500);
+  };
+
+  // const touchDevice = isTouchDevice();
+
+  const swipeHandlers = useSwipeRight({
+    onSwipeRight: handleSwipeComplete,
+    enabled: isTouch && !!currentOrder,
+  });
 
   //get a new order when page loads
   useEffect(() => {
     handleGetOrder();
+  }, []);
+
+  useEffect(() => {
+    const checkTouch = () => {
+      const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+      setIsTouch(hasTouch);
+    };
+
+    checkTouch(); // run once
+
+    window.addEventListener("resize", checkTouch);
+
+    return () => {
+      window.removeEventListener("resize", checkTouch);
+    };
   }, []);
 
   return (
@@ -296,22 +356,41 @@ function App() {
           {/* draggable ingredients fill inside the ingredients area */}
           <IngredientShelf />
 
+          {/* {!touchDevice && ( 
           <Button
             onClick={() => handleCheckOrder()}
             style={{ alignSelf: "start" }}
           >
             Complete
           </Button>
+           )} */}
+          <div></div>
         </CafeWall>
 
-        <Counter>
+        <Counter {...(isTouch ? swipeHandlers : {})}>
+          {!isTouch && (
+            <Button
+              onClick={() => handleCheckOrder()}
+              style={{
+                position: "absolute",
+                bottom: "20px",
+                right: "20px",
+                zIndex: 100,
+              }}
+            >
+              Complete
+            </Button>
+          )}
           {/* animate mugs going off screen on complete, on screen when new order comes in */}
           <AnimatePresence initial={false}>
             <motion.div
               initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: "0%", opacity: 1 }}
-              transition={{ duration: 1 }}
+              animate={{
+                x: isSwipingAway ? "100%" : "0%",
+                opacity: isSwipingAway ? 0 : 1,
+              }}
               exit={{ x: "100%", opacity: 0 }}
+              transition={{ duration: 0.5 }}
               key={currentOrder?.id ? `mug-div-${currentOrder?.id}` : "mug-div"}
               style={{
                 position: "absolute",
@@ -378,6 +457,7 @@ function App() {
               ))}
             </motion.div>
           </AnimatePresence>
+
           <TrashCan />
         </Counter>
       </div>
