@@ -6,7 +6,10 @@ const SuccessText = styled.p`
   color: white;
   //   text-shadow: 2px 2px 7px #eec73f;
   text-shadow: 2px 2px 7px #580286ff;
-  font-family: Indie Flower, cursive;
+  font-family:
+    Indie Flower,
+    cursive;
+  text-align: center;
 `;
 const MessageContainer = styled.div`
   transform: translate(-50%, -50%);
@@ -24,6 +27,9 @@ const messages: string[] = [
   "Good job!",
   "Ok!",
   "Yay!",
+  "I'm proud of you.",
+  "Delicious!",
+  "This is the best coffee shop!",
 ];
 
 export const SuccessMessage = () => {
