@@ -340,18 +340,26 @@ function App() {
         }}
       >
         <CafeWall>
-          <Button
-            onClick={() => handleGetOrder()}
-            style={{ alignSelf: "start" }}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
           >
-            Get order
-          </Button>
-          <Button
-            onClick={() => setShowRecipe(!showRecipe)}
-            style={{ alignSelf: "start" }}
-          >
-            {showRecipe ? "Hide Recipes" : "Show Recipes"}
-          </Button>
+            <Button
+              onClick={() => handleGetOrder()}
+              style={{ alignSelf: "start" }}
+            >
+              Get order
+            </Button>
+            <Button
+              onClick={() => setShowRecipe(!showRecipe)}
+              style={{ alignSelf: "start" }}
+            >
+              {showRecipe ? "Hide Recipes" : "Show Recipes"}
+            </Button>
+          </div>
 
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 

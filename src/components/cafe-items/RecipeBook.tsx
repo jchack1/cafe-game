@@ -5,8 +5,9 @@ import SmallButton from "../ui/SmallButton";
 import { Howl } from "howler";
 
 const RecipePage = styled.div`
-  width: 200px;
-  font-size: 12;
+  width: 80vw;
+  max-width: 300px;
+  font-size: 14px;
   border: 1px solid #aaa;
   display: flex;
   justify-content: space-around;
@@ -14,8 +15,11 @@ const RecipePage = styled.div`
   box-shadow: -1px 3px 19px -5px rgba(164, 94, 120, 0.84);
 
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 50%;
+  right: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
 
   font-family:
     Indie Flower,
