@@ -9,7 +9,7 @@ const MugImage = styled.img`
     width: 120px;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 500px), (max-height: 600px) {
     width: 90px;
   }
 `;

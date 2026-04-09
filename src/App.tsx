@@ -358,14 +358,6 @@ function App() {
           {/* draggable ingredients fill inside the ingredients area */}
           <IngredientShelf />
 
-          {/* {!touchDevice && ( 
-          <Button
-            onClick={() => handleCheckOrder()}
-            style={{ alignSelf: "start" }}
-          >
-            Complete
-          </Button>
-           )} */}
           <div></div>
         </CafeWall>
 
@@ -402,62 +394,87 @@ function App() {
                 bottom: 0,
                 display: "flex",
                 alignItems: "center",
+                alignContent: "center",
+
                 justifyContent: "center",
                 flexWrap: "wrap",
               }}
             >
               {/* show mug for each item in order */}
               {currentOrder?.items.map((item) => (
-                <MugInfo key={`mug-info-${item.id}`}>
-                  {/* mug icon */}
-                  <Mug id={item.id} />
-
-                  {/* item name, and result*/}
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <Text>{recipeMap[item.recipeId].name}</Text>
-                    {item.result === "success" ? (
-                      <div>
-                        <CheckSVG colour={"#1fff35"} width={32} />
-                      </div>
-                    ) : item.result === "fail" && showFailMessage ? (
-                      <div>
-                        <XSVG colour={"#ff1f1f"} width={32} />
-                      </div>
-                    ) : null}
-                  </div>
-
+                <MugInfo
+                  key={`mug-info-${item.id}`}
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
                   {/* display chosen ingredients as icons*/}
 
-                  {Object.entries(selectedIngredients[item.id] ?? {}).length >
-                    0 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "6px",
-                        alignItems: "center",
-                        backgroundColor: "pink",
-                        padding: "4px",
-                      }}
-                    >
-                      {selectedIngredients[item.id] &&
-                        Object.entries(selectedIngredients[item.id]).map(
+                  <div
+                    style={{
+                      height: 36, // reserve space (tune this!)
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {Object.entries(selectedIngredients[item.id] ?? {}).length >
+                      0 && (
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "6px",
+                          alignItems: "center",
+                          backgroundColor: "pink",
+                          padding: "4px",
+                        }}
+                      >
+                        {Object.entries(selectedIngredients[item.id]).map(
                           ([ingredient, number]) => (
-                          <div
-                            key={`chosen-${ingredient}`}
-                            style={{ position: "relative" }}
-                          >
-                            {number}
-                            <img
-                              src={`/images/coffee-items/${ingredient}.svg`}
-                              alt={ingredient}
-                              width={18}
-                              height={18}
-                            />
-                          </div>
-                        ),
-                      )}
+                            <div
+                              key={`chosen-${ingredient}`}
+                              style={{ position: "relative" }}
+                            >
+                              {number}
+                              <img
+                                src={`/images/coffee-items/${ingredient}.svg`}
+                                alt={ingredient}
+                                width={18}
+                                height={18}
+                              />
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* mug icon */}
+                  <Mug id={item.id} />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>{recipeMap[item.recipeId].name}</Text>
+                    {/* item name, and result*/}
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {item.result === "success" ? (
+                        <div>
+                          <CheckSVG colour={"#1fff35"} width={28} />
+                        </div>
+                      ) : item.result === "fail" && showFailMessage ? (
+                        <div>
+                          <XSVG colour={"#ff1f1f"} width={28} />
+                        </div>
+                      ) : null}
                     </div>
-                  )}
+                  </div>
                 </MugInfo>
               ))}
             </motion.div>

@@ -17,7 +17,6 @@ const CounterBackground = styled.div`
   background-repeat: no-repeat;
 
   position: relative;
-  // overflow: hidden;
 `;
 
 export const Counter = ({ children, ...props }: CounterProps) => {
