@@ -37,7 +37,7 @@ import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckSVG } from "./components/svgs/CheckSVG";
 import { useSwipeRight } from "./hooks/useSwipeRight";
-
+import { isTouchDevice } from "./utils/isTouchDevice";
 /**
  *
  * @todo: major styling work; re-organize code
@@ -54,11 +54,7 @@ function App() {
   const [failMessage, setFailMessage] = useState<string | null>(null);
 
   const [isSwipingAway, setIsSwipingAway] = useState<boolean>(false);
-  const [isTouch, setIsTouch] = useState(() => {
-    if (typeof window === "undefined") return false;
-
-    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  });
+  const [isTouch, setIsTouch] = useState(isTouchDevice());
 
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});

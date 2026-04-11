@@ -1,6 +1,8 @@
 //this component is where the mugs are placed
 import styled from "styled-components";
 import type { ReactNode } from "react";
+import { SwipeRightIcon } from "../ui/messages/SwipeRightIcon";
+import { isTouchDevice } from "../../utils/isTouchDevice";
 
 type CounterProps = {
   children?: ReactNode;
@@ -20,5 +22,11 @@ const CounterBackground = styled.div`
 `;
 
 export const Counter = ({ children, ...props }: CounterProps) => {
-  return <CounterBackground {...props}>{children}</CounterBackground>;
+  const isTouch = isTouchDevice();
+  return (
+    <CounterBackground {...props}>
+      {children}
+      {isTouch && <SwipeRightIcon />}
+    </CounterBackground>
+  );
 };
