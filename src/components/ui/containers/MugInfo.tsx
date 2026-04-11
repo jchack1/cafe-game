@@ -7,4 +7,5 @@ export const MugInfo = styled.div`
   flex-direction: column;
   align-items: center;
   height: 175px;
+  position: relative;
 `;

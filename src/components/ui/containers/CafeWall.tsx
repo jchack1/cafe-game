@@ -8,7 +8,6 @@ export const CafeWall = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 
   // background-color: #fce5ee; //original background colour
   background-color: #8d6574ff;

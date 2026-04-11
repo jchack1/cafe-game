@@ -12,9 +12,6 @@ import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
 import { FailMessage } from "./components/ui/messages/FailMessage";
 import { TrashCan } from "./components/dragAndDrop/TrashCan";
-import { XSVG } from "./components/svgs/XSVG";
-//ingredient icons
-
 //helpers/types
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -35,9 +32,11 @@ import type {
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
-import { CheckSVG } from "./components/svgs/CheckSVG";
 import { useSwipeRight } from "./hooks/useSwipeRight";
 import { isTouchDevice } from "./utils/isTouchDevice";
+import { MugIngredientList } from "./components/cafe-items/MugIngredientList";
+import { ResultIcon } from "./components/cafe-items/ResultIcon";
+import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
 /**
  *
  * @todo: major styling work; re-organize code
@@ -294,26 +293,18 @@ function App() {
     }, 500);
   };
 
-  // const touchDevice = isTouchDevice();
-
   const swipeHandlers = useSwipeRight({
     onSwipeRight: handleSwipeComplete,
     enabled: isTouch && !!currentOrder,
   });
 
-  //get a new order when page loads
-  useEffect(() => {
-    handleGetOrder();
-  }, []);
-
   useEffect(() => {
     const checkTouch = () => {
-      const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-      setIsTouch(hasTouch);
+      setIsTouch(isTouchDevice());
     };
 
     checkTouch(); // run once
+    handleGetOrder(); //get a new order when page loads
 
     window.addEventListener("resize", checkTouch);
 
@@ -336,33 +327,16 @@ function App() {
         }}
       >
         <CafeWall>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around",
-            }}
-          >
-            <Button
-              onClick={() => handleGetOrder()}
-              style={{ alignSelf: "start" }}
-            >
-              Get order
-            </Button>
-            <Button
-              onClick={() => setShowRecipe(!showRecipe)}
-              style={{ alignSelf: "start" }}
-            >
-              {showRecipe ? "Hide Recipes" : "Show Recipes"}
-            </Button>
-          </div>
+          <CafeWallButtons
+            handleGetOrder={handleGetOrder}
+            showRecipe={showRecipe}
+            setShowRecipe={setShowRecipe}
+          />
 
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 
           {/* draggable ingredients fill inside the ingredients area */}
           <IngredientShelf />
-
-          <div></div>
         </CafeWall>
 
         <Counter {...(isTouch ? swipeHandlers : {})}>
@@ -406,58 +380,16 @@ function App() {
             >
               {/* show mug for each item in order */}
               {currentOrder?.items.map((item) => (
-                <MugInfo
-                  key={`mug-info-${item.id}`}
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* display chosen ingredients as icons*/}
-
-                  <div
-                    style={{
-                      height: 36, // reserve space (tune this!)
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {Object.entries(selectedIngredients[item.id] ?? {}).length >
-                      0 && (
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "6px",
-                          alignItems: "center",
-                          backgroundColor: "pink",
-                          padding: "4px",
-                        }}
-                      >
-                        {Object.entries(selectedIngredients[item.id]).map(
-                          ([ingredient, number]) => (
-                            <div
-                              key={`chosen-${ingredient}`}
-                              style={{ position: "relative" }}
-                            >
-                              {number}
-                              <img
-                                src={`/images/coffee-items/${ingredient}.svg`}
-                                alt={ingredient}
-                                width={18}
-                                height={18}
-                              />
-                            </div>
-                          ),
-                        )}
-                      </div>
-                    )}
-                  </div>
+                <MugInfo key={`mug-info-${item.id}`}>
+                  <MugIngredientList
+                    item={item}
+                    selectedIngredients={selectedIngredients}
+                  />
 
                   {/* mug icon */}
                   <Mug id={item.id} />
+
+                  {/* item name, and result*/}
                   <div
                     style={{
                       display: "flex",
@@ -466,18 +398,8 @@ function App() {
                     }}
                   >
                     <Text>{recipeMap[item.recipeId].name}</Text>
-                    {/* item name, and result*/}
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {item.result === "success" ? (
-                        <div>
-                          <CheckSVG colour={"#1fff35"} width={28} />
-                        </div>
-                      ) : item.result === "fail" && showFailMessage ? (
-                        <div>
-                          <XSVG colour={"#ff1f1f"} width={28} />
-                        </div>
-                      ) : null}
-                    </div>
+
+                    <ResultIcon showFailMessage={showFailMessage} item={item} />
                   </div>
                 </MugInfo>
               ))}

@@ -18,13 +18,14 @@ const Shelf = styled.div`
 
 const IngredientShelfContainer = styled.div`
   width: min-content;
-  margin: 0 auto;
+  margin: auto 0;
+  align-self: center;
 `;
 
 export const IngredientShelf = () => {
-  const [chunkedIngredients, setChunkedIngredients] = useState<IngredientType[][]>([
-    ingredients,
-  ]);
+  const [chunkedIngredients, setChunkedIngredients] = useState<
+    IngredientType[][]
+  >([ingredients]);
 
   useEffect(() => {
     const updateChunks = () => {
