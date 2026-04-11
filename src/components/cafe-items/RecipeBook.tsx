@@ -37,6 +37,10 @@ const CustomPositionedContainer = styled.div`
   right: 0px;
 `;
 
+const RecipeLine = styled.p`
+  font-size: 16px;
+`;
+
 export const RecipeBook = ({
   setShowRecipe,
 }: {
@@ -97,9 +101,13 @@ export const RecipeBook = ({
 
         {Object.entries(recipes[currentRecipeIndex].ingredients).map(
           ([ingredient, number]) => (
-            <p key={`${number}-${ingredient}`}>
-              {number} {ingredient}
-            </p>
+            <RecipeLine key={`${number}-${ingredient}`}>
+              {number} {ingredient}{" "}
+              <img
+                src={`/images/coffee-items/${ingredient}.svg`}
+                style={{ height: "1em" }}
+              />
+            </RecipeLine>
           ),
         )}
       </div>
