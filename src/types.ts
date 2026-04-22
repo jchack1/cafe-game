@@ -17,6 +17,7 @@ export type Recipe = {
     [ingredient: string]: number;
   };
   level: number; //earlier in the game, only pull low level recipes
+  score: number;
 };
 
 export type OrderItem = {

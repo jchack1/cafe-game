@@ -18,6 +18,7 @@ export const recipes: Recipe[] = [
       espresso: 1,
     },
     level: 1,
+    score: 100,
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const recipes: Recipe[] = [
       drip: 1,
     },
     level: 1,
+    score: 100,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ export const recipes: Recipe[] = [
       water: 3,
     },
     level: 1,
+    score: 120,
   },
   {
     id: 4,
@@ -44,6 +47,7 @@ export const recipes: Recipe[] = [
       milk: 2,
     },
     level: 1,
+    score: 130,
   },
   {
     id: 5,
@@ -53,6 +57,7 @@ export const recipes: Recipe[] = [
       milk: 3,
     },
     level: 1,
+    score: 140,
   },
   {
     id: 6,
@@ -63,6 +68,7 @@ export const recipes: Recipe[] = [
       chocolate: 1,
     },
     level: 1,
+    score: 160,
   },
   {
     id: 7,
@@ -72,6 +78,7 @@ export const recipes: Recipe[] = [
       chocolate: 1,
     },
     level: 1,
+    score: 150,
   },
 ];
 
