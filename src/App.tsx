@@ -1,5 +1,7 @@
 //hooks
 import { useState, useEffect, useRef } from "react";
+import { useSwipeRight } from "./hooks/useSwipeRight";
+import { useScore } from "./hooks/useScore";
 //components
 import { Button } from "./components/ui/Button";
 import { Mug } from "./components/dragAndDrop/Mug";
@@ -12,7 +14,10 @@ import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
 import { FailMessage } from "./components/ui/messages/FailMessage";
 import { TrashCan } from "./components/dragAndDrop/TrashCan";
-//helpers/types
+import { MugIngredientList } from "./components/cafe-items/MugIngredientList";
+import { ResultIcon } from "./components/cafe-items/ResultIcon";
+import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
+//helpers/types/libraries
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
 import type { Order, SelectedIngredients, OrderItem } from "./types";
@@ -32,11 +37,9 @@ import type {
 import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
-import { useSwipeRight } from "./hooks/useSwipeRight";
 import { isTouchDevice } from "./utils/isTouchDevice";
-import { MugIngredientList } from "./components/cafe-items/MugIngredientList";
-import { ResultIcon } from "./components/cafe-items/ResultIcon";
-import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
+import { ScoreText } from "./components/ui/ScoreText";
+
 /**
  *
  * @todo: major styling work; re-organize code
@@ -54,6 +57,14 @@ function App() {
 
   const [isSwipingAway, setIsSwipingAway] = useState<boolean>(false);
   const [isTouch, setIsTouch] = useState(isTouchDevice());
+
+  const {
+    startTimer,
+    incrementIncorrectCount,
+    incrementIngredientDiscardCount,
+    updateTotalScore,
+    totalScore,
+  } = useScore();
 
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
@@ -84,6 +95,8 @@ function App() {
 
     setCurrentOrder(newOrder);
     setSelectedIngredients({});
+
+    startTimer();
   };
 
   const handleCheckOrder = () => {
@@ -96,9 +109,9 @@ function App() {
 
     //if no ingredients in any cups, fail
     if (selectedIngredientsArr.length === 0) {
-      // alert("fail - you didn't make any drinks");
       setShowFailMessage(true);
       setFailMessage("You didn't make any drinks...");
+      incrementIncorrectCount();
 
       setTimeout(() => {
         setShowFailMessage(false);
@@ -141,6 +154,8 @@ function App() {
     }
 
     if (orderFails.length > 0) {
+      incrementIncorrectCount();
+
       setCurrentOrder((prevOrder) => {
         setShowFailMessage(true);
         errorSound.play();
@@ -157,6 +172,7 @@ function App() {
         };
       });
     } else {
+      updateTotalScore(currentOrder);
       setShowSuccessMessage(true);
       successSound.play();
 
@@ -257,6 +273,8 @@ function App() {
       //todo: remove fail message, if it exists, from item in order
 
       emptyMugSound.play();
+
+      incrementIngredientDiscardCount();
     }
 
     if (dragIntervalId.current) {
@@ -327,12 +345,21 @@ function App() {
         }}
       >
         <CafeWall>
-          <CafeWallButtons
-            handleGetOrder={handleGetOrder}
-            showRecipe={showRecipe}
-            setShowRecipe={setShowRecipe}
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <CafeWallButtons
+              handleGetOrder={handleGetOrder}
+              showRecipe={showRecipe}
+              setShowRecipe={setShowRecipe}
+            />
 
+            <ScoreText>Score: {totalScore}</ScoreText>
+          </div>
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 
           {/* draggable ingredients fill inside the ingredients area */}

@@ -44,28 +44,46 @@ export const useScore = () => {
       console.log("no timeToComplete - startTimeRef.current === null");
     }
 
+    console.log("-----");
+
     //1. get base score based on ingredient items
     const baseScore = calculateOrderScore(order.items, recipes);
+
+    console.log("baseScore");
+    console.log(baseScore);
 
     //2. get time bonus
     const timeBonus = timeToComplete
       ? calculateTimeBonus(order.items.length, timeToComplete)
       : 0;
 
+    console.log("timeBonus");
+    console.log(timeBonus);
+
     //3. get deduction for ingredient discard
     const ingredientDiscardDeduction =
       ingredientDiscardCount * INGREDIENT_DISCARD_DEDUCTION;
 
+    console.log("ingredientDiscardDeduction");
+    console.log(ingredientDiscardDeduction);
+
     //4. get deduction for incorrect drink count
     const incorrectDeduction = incorrectCount * INCORRECT_DRINK_DEDUCTION;
+
+    console.log("incorrectDeduction");
+    console.log(incorrectDeduction);
 
     //5. sum scores
     const roundTotal =
       baseScore + timeBonus - ingredientDiscardDeduction - incorrectDeduction;
 
+    console.log("roundTotal");
+    console.log(roundTotal);
+
     //6. update round and total scores
     setCurrentRoundScore(roundTotal);
     setTotalScore((prev) => prev + roundTotal);
+    resetState();
   };
 
   //deduct points from current score when they throw away ingredients
@@ -118,6 +136,12 @@ export const useScore = () => {
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
+  };
+
+  const resetState = () => {
+    setCurrentRoundScore(0);
+    setIncorrectCount(0);
+    setIngredientDiscardCount(0);
   };
 
   return {
