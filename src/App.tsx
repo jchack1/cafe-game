@@ -20,7 +20,12 @@ import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
 //helpers/types/libraries
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
-import type { Order, SelectedIngredients, OrderItem } from "./types";
+import type {
+  Order,
+  SelectedIngredients,
+  OrderItem,
+  CupIngredients,
+} from "./types";
 import { areObjectsEqual } from "./utils/areObjectsEqual";
 import {
   DndContext,
@@ -64,6 +69,7 @@ function App() {
     incrementIngredientDiscardCount,
     updateTotalScore,
     totalScore,
+    resetScoreState,
   } = useScore();
 
   const [selectedIngredients, setSelectedIngredients] =
@@ -91,6 +97,7 @@ function App() {
   // handlers
 
   const handleGetOrder = () => {
+    resetScoreState();
     const newOrder = generateOrder(level);
 
     setCurrentOrder(newOrder);
@@ -111,7 +118,7 @@ function App() {
     if (selectedIngredientsArr.length === 0) {
       setShowFailMessage(true);
       setFailMessage("You didn't make any drinks...");
-      incrementIncorrectCount();
+      incrementIncorrectCount(currentOrder.items.length);
 
       setTimeout(() => {
         setShowFailMessage(false);
@@ -153,8 +160,9 @@ function App() {
       }
     }
 
-    if (orderFails.length > 0) {
-      incrementIncorrectCount();
+    const failCount = orderFails.length;
+    if (failCount > 0) {
+      incrementIncorrectCount(failCount);
 
       setCurrentOrder((prevOrder) => {
         setShowFailMessage(true);
@@ -244,10 +252,21 @@ function App() {
     }
   };
 
+  const getNumIngredientsInCup = (cupIngredients: CupIngredients) => {
+    const num = Object.values(cupIngredients).reduce((acc, current) => {
+      return acc + current;
+    }, 0);
+
+    return num;
+  };
+
   //always clear interval whenever we stop dragging
   const handleDragEnd = (event: DragEndEvent) => {
     const overId = event.over?.id ?? null;
     const activeItem = event.active;
+    const numCupIngredients = selectedIngredients[activeItem.id]
+      ? getNumIngredientsInCup(selectedIngredients[activeItem.id])
+      : 0;
 
     // if mug is dragged over trash area, get rid of ingredients
     // this could be its own function
@@ -274,7 +293,7 @@ function App() {
 
       emptyMugSound.play();
 
-      incrementIngredientDiscardCount();
+      incrementIngredientDiscardCount(numCupIngredients);
     }
 
     if (dragIntervalId.current) {

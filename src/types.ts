@@ -1,13 +1,11 @@
 export type Ingredient = string;
 
-// export type SelectedIngredients = {
-//   [ingredient: Ingredient]: number;
-// };
+export type CupIngredients = {
+  [ingredient: string]: number;
+};
 
 export type SelectedIngredients = {
-  [orderItemId: string]: {
-    [ingredient: string]: number;
-  };
+  [orderItemId: string]: CupIngredients;
 };
 
 export type Recipe = {

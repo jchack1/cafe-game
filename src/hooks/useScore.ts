@@ -3,8 +3,8 @@ import { recipes } from "../recipes";
 import type { Order, OrderItem, Recipe } from "../types";
 
 //constants
-const INGREDIENT_DISCARD_DEDUCTION = 100;
-const INCORRECT_DRINK_DEDUCTION = 25;
+const INGREDIENT_DISCARD_DEDUCTION = 25;
+const INCORRECT_DRINK_DEDUCTION = 50;
 
 /**
  *
@@ -83,17 +83,17 @@ export const useScore = () => {
     //6. update round and total scores
     setCurrentRoundScore(roundTotal);
     setTotalScore((prev) => prev + roundTotal);
-    resetState();
+    resetScoreState();
   };
 
-  //deduct points from current score when they throw away ingredients
-  //don't let score go below 0
-  const incrementIngredientDiscardCount = () => {
-    setIngredientDiscardCount((prev) => prev + 1);
+  //deduct points from current score when they throw away ingredients (per ingredient)
+  const incrementIngredientDiscardCount = (wastedIngredients: number) => {
+    setIngredientDiscardCount((prev) => prev + wastedIngredients);
   };
 
-  const incrementIncorrectCount = () => {
-    setIncorrectCount((prev) => prev + 1);
+  //deduct number of incorrect drinks when they submit an order (if any)
+  const incrementIncorrectCount = (failCount: number) => {
+    setIncorrectCount((prev) => prev + failCount);
   };
 
   //depending on how long they take to finish, give bonus
@@ -138,7 +138,7 @@ export const useScore = () => {
     startTimeRef.current = Date.now();
   };
 
-  const resetState = () => {
+  const resetScoreState = () => {
     setCurrentRoundScore(0);
     setIncorrectCount(0);
     setIngredientDiscardCount(0);
@@ -151,5 +151,6 @@ export const useScore = () => {
     incrementIncorrectCount,
     totalScore,
     currentRoundScore,
+    resetScoreState,
   };
 };
