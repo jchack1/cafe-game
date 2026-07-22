@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { recipes } from "../recipes";
-import type { Order, OrderItem, Recipe } from "../types";
+import type { Order, OrderItem, Recipe, RoundScoreResult } from "../types";
 
 //constants
 const INGREDIENT_DISCARD_DEDUCTION = 25;
@@ -17,6 +17,9 @@ export const useScore = () => {
   const [ingredientDiscardCount, setIngredientDiscardCount] =
     useState<number>(0);
   const [incorrectCount, setIncorrectCount] = useState<number>(0); //number of drinks they get wrong during round
+  const [roundResult, setRoundResult] = useState<RoundScoreResult | null>(
+    null,
+  ); //breakdown of the last completed round, for the score animation
   const startTimeRef = useRef<number | null>(null); //when they started the order
 
   //fetch previous score on load - for display
@@ -80,10 +83,26 @@ export const useScore = () => {
     console.log("roundTotal");
     console.log(roundTotal);
 
-    //6. update round and total scores
+    //6. build breakdown for the score animation, dropping anything that didn't apply this round
+    const items = [
+      { label: "drinks", value: baseScore },
+      { label: "speed bonus", value: timeBonus },
+      { label: "spilled ingredients", value: -ingredientDiscardDeduction },
+      { label: "wrong drinks", value: -incorrectDeduction },
+    ].filter((item) => item.value !== 0);
+
+    //7. update round and total scores
     setCurrentRoundScore(roundTotal);
-    setTotalScore((prev) => prev + roundTotal);
+    setTotalScore((prev) => {
+      const newTotal = prev + roundTotal;
+      setRoundResult({ items, previousTotal: prev, newTotal });
+      return newTotal;
+    });
     resetScoreState();
+  };
+
+  const clearRoundResult = () => {
+    setRoundResult(null);
   };
 
   //deduct points from current score when they throw away ingredients (per ingredient)
@@ -152,5 +171,7 @@ export const useScore = () => {
     totalScore,
     currentRoundScore,
     resetScoreState,
+    roundResult,
+    clearRoundResult,
   };
 };

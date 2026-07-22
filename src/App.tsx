@@ -43,7 +43,7 @@ import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
 import { isTouchDevice } from "./utils/isTouchDevice";
-import { ScoreText } from "./components/ui/ScoreText";
+import { ScoreBreakdown } from "./components/ui/ScoreBreakdown";
 
 /**
  *
@@ -70,6 +70,8 @@ function App() {
     updateTotalScore,
     totalScore,
     resetScoreState,
+    roundResult,
+    clearRoundResult,
   } = useScore();
 
   const [selectedIngredients, setSelectedIngredients] =
@@ -377,7 +379,11 @@ function App() {
               setShowRecipe={setShowRecipe}
             />
 
-            <ScoreText>Score: {totalScore}</ScoreText>
+            <ScoreBreakdown
+              totalScore={totalScore}
+              roundResult={roundResult}
+              onRoundResultConsumed={clearRoundResult}
+            />
           </div>
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 

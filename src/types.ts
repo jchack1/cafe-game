@@ -28,3 +28,14 @@ export type Order = {
   id: string; //uuid
   items: OrderItem[]; //recipe numbers - all items to make
 };
+
+export type ScoreBreakdownItem = {
+  label: string;
+  value: number;
+};
+
+export type RoundScoreResult = {
+  items: ScoreBreakdownItem[];
+  previousTotal: number;
+  newTotal: number;
+};
