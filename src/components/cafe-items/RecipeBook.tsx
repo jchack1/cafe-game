@@ -110,6 +110,11 @@ export const RecipeBook = ({
             </RecipeLine>
           ),
         )}
+
+        <RecipeLine>
+          <span style={{ fontWeight: 700 }}>Score:</span>{" "}
+          {recipes[currentRecipeIndex].score}
+        </RecipeLine>
       </div>
 
       {/* next */}
