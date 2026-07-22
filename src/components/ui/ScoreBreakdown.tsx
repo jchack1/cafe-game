@@ -52,7 +52,7 @@ export const ScoreBreakdown = ({
 }: ScoreBreakdownProps) => {
   const [phase, setPhase] = useState<"idle" | "appearing" | "flying">("idle");
   const [displayScore, setDisplayScore] = useState(totalScore);
-  console.log(roundResult);
+
   //kick off a new reveal/fly sequence whenever a round finishes
   useEffect(() => {
     if (!roundResult) return;
