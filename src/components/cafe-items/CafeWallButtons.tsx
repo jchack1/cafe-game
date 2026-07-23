@@ -1,4 +1,5 @@
 import { Button } from "../ui/Button";
+import { featureflag } from "../../feature-flags";
 
 type CafeWallButtonProps = {
   handleGetOrder: () => void;
@@ -19,9 +20,12 @@ export const CafeWallButtons = ({
         justifyContent: "space-around",
       }}
     >
-      <Button onClick={handleGetOrder} style={{ alignSelf: "start" }}>
-        Get order
-      </Button>
+      {/* get order button for dev only - orders load automatically in deployed game */}
+      {featureflag.getOrderButton && (
+        <Button onClick={handleGetOrder} style={{ alignSelf: "start" }}>
+          Get order
+        </Button>
+      )}
       <Button
         onClick={() => setShowRecipe(!showRecipe)}
         style={{ alignSelf: "start" }}
