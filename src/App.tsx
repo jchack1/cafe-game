@@ -111,8 +111,8 @@ function App() {
   const handleCheckOrder = () => {
     if (!currentOrder || !currentOrder.items.length) return;
 
-    const orderSuccesses: OrderItem[] = [];
-    const orderFails: OrderItem[] = [];
+    // const orderSuccesses: OrderItem[] = [];
+    // const orderFails: OrderItem[] = [];
 
     const selectedIngredientsArr = Object.entries(selectedIngredients);
 
@@ -132,12 +132,15 @@ function App() {
       return;
     }
 
+    const checkedOrderItems: OrderItem[] = [];
+    let failCount = 0;
+
     for (const orderItem of currentOrder.items) {
       const orderIngredients = selectedIngredients[orderItem.id];
 
       //if user didn't put ingredients in the cup, that item is a fail
       if (!orderIngredients) {
-        orderFails.push({
+        checkedOrderItems.push({
           ...orderItem,
           result: `fail! you didn't make the ${
             recipeMap[orderItem.recipeId].name
@@ -150,19 +153,19 @@ function App() {
       const recipeIngredients = recipeMap[orderItem.recipeId].ingredients;
 
       if (areObjectsEqual(orderIngredients, recipeIngredients)) {
-        orderSuccesses.push({
+        checkedOrderItems.push({
           ...orderItem,
           result: "success",
         });
       } else {
-        orderFails.push({
+        checkedOrderItems.push({
           ...orderItem,
           result: "fail",
         });
+        failCount++;
       }
     }
 
-    const failCount = orderFails.length;
     if (failCount > 0) {
       incrementIncorrectCount(failCount);
 
@@ -177,9 +180,13 @@ function App() {
         if (!prevOrder) return prevOrder;
 
         return {
-          ...prevOrder,
-          items: [...orderSuccesses, ...orderFails],
+          id: prevOrder.id,
+          items: checkedOrderItems,
         };
+        // return {
+        //   ...prevOrder,
+        //   items: [...orderSuccesses, ...orderFails],
+        // };
       });
     } else {
       updateTotalScore(currentOrder);
