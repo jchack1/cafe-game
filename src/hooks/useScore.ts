@@ -17,9 +17,7 @@ export const useScore = () => {
   const [ingredientDiscardCount, setIngredientDiscardCount] =
     useState<number>(0);
   const [incorrectCount, setIncorrectCount] = useState<number>(0); //number of drinks they get wrong during round
-  const [roundResult, setRoundResult] = useState<RoundScoreResult | null>(
-    null,
-  ); //breakdown of the last completed round, for the score animation
+  const [roundResult, setRoundResult] = useState<RoundScoreResult | null>(null); //breakdown of the last completed round, for the score animation
   const startTimeRef = useRef<number | null>(null); //when they started the order
 
   //fetch previous score on load - for display
@@ -93,11 +91,12 @@ export const useScore = () => {
 
     //7. update round and total scores
     setCurrentRoundScore(roundTotal);
-    setTotalScore((prev) => {
-      const newTotal = prev + roundTotal;
-      setRoundResult({ items, previousTotal: prev, newTotal });
-      return newTotal;
-    });
+
+    const newTotal = totalScore + roundTotal;
+    setRoundResult({ items, previousTotal: totalScore, newTotal });
+
+    setTotalScore(newTotal);
+
     resetScoreState();
   };
 
@@ -150,7 +149,7 @@ export const useScore = () => {
       return acc + currentItemRecipeScore;
     }, 0);
 
-    return sumItemScores * (1 + 0.1 * items.length); //bigger score if more drinks
+    return Math.round(sumItemScores * (1 + 0.1 * items.length)); //bigger score if more drinks
   };
 
   const startTimer = () => {
