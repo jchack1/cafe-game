@@ -111,9 +111,6 @@ function App() {
   const handleCheckOrder = () => {
     if (!currentOrder || !currentOrder.items.length) return;
 
-    // const orderSuccesses: OrderItem[] = [];
-    // const orderFails: OrderItem[] = [];
-
     const selectedIngredientsArr = Object.entries(selectedIngredients);
 
     //if no ingredients in any cups, fail
@@ -183,10 +180,6 @@ function App() {
           id: prevOrder.id,
           items: checkedOrderItems,
         };
-        // return {
-        //   ...prevOrder,
-        //   items: [...orderSuccesses, ...orderFails],
-        // };
       });
     } else {
       updateTotalScore(currentOrder);
