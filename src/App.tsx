@@ -9,6 +9,7 @@ import { IngredientShelf } from "./components/dragAndDrop/IngredientShelf";
 import { Counter } from "./components/cafe-items/Counter";
 import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
+import { WallTopBar } from "./components/ui/containers/WallTopBar";
 import { Text } from "./components/ui/Text";
 import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
@@ -17,6 +18,9 @@ import { TrashCan } from "./components/dragAndDrop/TrashCan";
 import { MugIngredientList } from "./components/cafe-items/MugIngredientList";
 import { ResultIcon } from "./components/cafe-items/ResultIcon";
 import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
+import { StringLights } from "./components/cafe-items/StringLights";
+import { HangingPlant } from "./components/cafe-items/HangingPlant";
+import { ShelfDecor } from "./components/cafe-items/ShelfDecor";
 //helpers/types/libraries
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -366,13 +370,13 @@ function App() {
         }}
       >
         <CafeWall>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <HangingPlant side="left" />
+          <HangingPlant side="right" />
+          <ShelfDecor />
+
+          <StringLights />
+
+          <WallTopBar>
             <CafeWallButtons
               handleGetOrder={handleGetOrder}
               showRecipe={showRecipe}
@@ -384,7 +388,7 @@ function App() {
               roundResult={roundResult}
               onRoundResultConsumed={clearRoundResult}
             />
-          </div>
+          </WallTopBar>
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 
           {/* draggable ingredients fill inside the ingredients area */}
