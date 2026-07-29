@@ -21,9 +21,6 @@ const PlantImg = styled.img<{ $side: "left" | "right" }>`
   opacity: ${MUTED_DECOR_OPACITY};
   filter: ${MUTED_DECOR_FILTER};
 
-  pointer-events: none;
-  z-index: 0;
-
   /* step down on mid-size screens */
   @media (max-width: 900px) {
     top: -30px;

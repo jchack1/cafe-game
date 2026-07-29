@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import SmallButton from "../ui/SmallButton";
 import { Howl } from "howler";
+import { Z_LAYERS } from "../../zLayers";
 
 const RecipePage = styled.div`
   width: 80vw;
@@ -20,6 +21,9 @@ const RecipePage = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 auto;
+
+  /* opens over the shelf and the ingredients on it */
+  z-index: ${Z_LAYERS.ui};
 
   font-family:
     Indie Flower,

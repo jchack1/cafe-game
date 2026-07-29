@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { SwipeRightIcon } from "../ui/messages/SwipeRightIcon";
 import { isTouchDevice } from "../../utils/isTouchDevice";
 import { MugStack } from "./MugStack";
+import { CounterDecor } from "./CounterDecor";
+import { CounterDecorLayer } from "../ui/containers/DecorLayer";
 
 type CounterProps = {
   children?: ReactNode;
@@ -26,7 +28,10 @@ export const Counter = ({ children, ...props }: CounterProps) => {
   const isTouch = isTouchDevice();
   return (
     <CounterBackground {...props}>
-      <MugStack />
+      <CounterDecorLayer>
+        <MugStack />
+        <CounterDecor />
+      </CounterDecorLayer>
       {children}
       {isTouch && <SwipeRightIcon />}
     </CounterBackground>

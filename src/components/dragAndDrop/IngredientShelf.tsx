@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ingredients } from "../../recipes";
 import { Ingredient } from "./Ingredient";
 import type { Ingredient as IngredientType } from "../../types";
+import { Z_LAYERS } from "../../zLayers";
 
 const IngredientRow = styled.div`
   display: flex;
@@ -16,10 +17,15 @@ const Shelf = styled.div`
   background: #5c2b16;
 `;
 
+//lifted onto the ingredient layer so the shelf and its draggables always paint in front of the
+//background props - the counter clutter rises up into this same band of the wall
 const IngredientShelfContainer = styled.div`
   width: min-content;
   margin: auto 0;
   align-self: center;
+
+  position: relative;
+  z-index: ${Z_LAYERS.ingredient};
 `;
 
 export const IngredientShelf = () => {

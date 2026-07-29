@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Z_LAYERS } from "../../../zLayers";
 
 const SuccessText = styled.p`
   font-size: 60px;
@@ -17,6 +18,7 @@ const MessageContainer = styled.div`
   display: inline-block;
   top: 50%;
   left: 50%;
+  z-index: ${Z_LAYERS.message};
 `;
 
 const messages: string[] = [

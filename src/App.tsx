@@ -10,6 +10,8 @@ import { Counter } from "./components/cafe-items/Counter";
 import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
 import { WallTopBar } from "./components/ui/containers/WallTopBar";
+import { WallDecorLayer } from "./components/ui/containers/DecorLayer";
+import { Z_LAYERS } from "./zLayers";
 import { Text } from "./components/ui/Text";
 import { RecipeBook } from "./components/cafe-items/RecipeBook";
 import { SuccessMessage } from "./components/ui/messages/SuccessMessage";
@@ -20,7 +22,6 @@ import { ResultIcon } from "./components/cafe-items/ResultIcon";
 import { CafeWallButtons } from "./components/cafe-items/CafeWallButtons";
 import { StringLights } from "./components/cafe-items/StringLights";
 import { HangingPlant } from "./components/cafe-items/HangingPlant";
-import { ShelfDecor } from "./components/cafe-items/ShelfDecor";
 //helpers/types/libraries
 import { recipeMap } from "./recipes";
 import { generateOrder } from "./utils/generateOrder";
@@ -370,9 +371,10 @@ function App() {
         }}
       >
         <CafeWall>
-          <HangingPlant side="left" />
-          <HangingPlant side="right" />
-          <ShelfDecor />
+          <WallDecorLayer>
+            <HangingPlant side="left" />
+            <HangingPlant side="right" />
+          </WallDecorLayer>
 
           <StringLights />
 
@@ -403,7 +405,7 @@ function App() {
                 position: "absolute",
                 bottom: "20px",
                 right: "20px",
-                zIndex: 100,
+                zIndex: Z_LAYERS.ui,
               }}
             >
               Complete
@@ -432,6 +434,8 @@ function App() {
 
                 justifyContent: "center",
                 flexWrap: "wrap",
+                //mugs sit above the background props but below the ingredients dragged onto them
+                zIndex: Z_LAYERS.mug,
               }}
             >
               {/* show mug for each item in order */}

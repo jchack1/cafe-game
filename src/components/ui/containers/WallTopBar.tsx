@@ -2,6 +2,7 @@
 //constrained to a centred band (rather than the full 100vw wall) so the buttons and score sit toward
 //the middle of the screen instead of hugging the corners where the hanging plants are.
 import styled from "styled-components";
+import { Z_LAYERS } from "../../../zLayers";
 
 export const WallTopBar = styled.div`
   display: flex;
@@ -15,5 +16,5 @@ export const WallTopBar = styled.div`
   padding: 0 16px;
 
   position: relative;
-  z-index: 1;
+  z-index: ${Z_LAYERS.ui};
 `;

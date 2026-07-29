@@ -1,5 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import styled from "styled-components";
+import { Z_LAYERS } from "../../zLayers";
 
 const TrashArea = styled.div`
   width: 100%;
@@ -8,6 +9,9 @@ const TrashArea = styled.div`
   bottom: 0;
   display: flex;
   justify-content: center;
+
+  /* stays on top of the mug being dragged into it, so the icon's pop is never hidden behind the mug */
+  z-index: ${Z_LAYERS.ui};
 `;
 /**
  * When Mug dragged over, delete it's ingredients
