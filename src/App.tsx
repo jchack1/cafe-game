@@ -9,7 +9,6 @@ import { IngredientShelf } from "./components/dragAndDrop/IngredientShelf";
 import { Counter } from "./components/cafe-items/Counter";
 import { MugInfo } from "./components/ui/containers/MugInfo";
 import { CafeWall } from "./components/ui/containers/CafeWall";
-import { WallTopBar } from "./components/ui/containers/WallTopBar";
 import { WallDecorLayer } from "./components/ui/containers/DecorLayer";
 import { Z_LAYERS } from "./zLayers";
 import { Text } from "./components/ui/Text";
@@ -378,19 +377,18 @@ function App() {
 
           <StringLights />
 
-          <WallTopBar>
-            <CafeWallButtons
-              handleGetOrder={handleGetOrder}
-              showRecipe={showRecipe}
-              setShowRecipe={setShowRecipe}
-            />
+          <CafeWallButtons
+            handleGetOrder={handleGetOrder}
+            showRecipe={showRecipe}
+            setShowRecipe={setShowRecipe}
+          />
 
-            <ScoreBreakdown
-              totalScore={totalScore}
-              roundResult={roundResult}
-              onRoundResultConsumed={clearRoundResult}
-            />
-          </WallTopBar>
+          <ScoreBreakdown
+            totalScore={totalScore}
+            roundResult={roundResult}
+            onRoundResultConsumed={clearRoundResult}
+          />
+
           {showRecipe && <RecipeBook setShowRecipe={setShowRecipe} />}
 
           {/* draggable ingredients fill inside the ingredients area */}

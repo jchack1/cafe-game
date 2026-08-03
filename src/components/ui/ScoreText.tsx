@@ -9,5 +9,5 @@ export const ScoreText = styled.p`
     Indie Flower,
     cursive;
   font-size: 24px;
-  text-align: right;
+  text-align: center;
 `;

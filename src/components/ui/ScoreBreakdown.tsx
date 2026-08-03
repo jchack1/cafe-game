@@ -19,10 +19,11 @@ const Wrapper = styled.div`
 const BreakdownList = styled.div`
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   padding-top: ${GAP_BELOW_SCORE}px;
   pointer-events: none;
 `;
