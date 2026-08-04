@@ -135,18 +135,20 @@ function App() {
 
     const checkedOrderItems: OrderItem[] = [];
     let failCount = 0;
+    const unmadeDrinks = [];
 
     for (const orderItem of currentOrder.items) {
       const orderIngredients = selectedIngredients[orderItem.id];
 
       //if user didn't put ingredients in the cup, that item is a fail
-      if (!orderIngredients) {
+      if (!orderIngredients || Object.entries(orderIngredients).length === 0) {
         checkedOrderItems.push({
           ...orderItem,
-          result: `fail! you didn't make the ${
-            recipeMap[orderItem.recipeId].name
-          }`,
+          result: "fail",
         });
+        failCount++;
+        unmadeDrinks.push(recipeMap[orderItem.recipeId].name);
+
         continue;
       }
 
@@ -169,6 +171,19 @@ function App() {
 
     if (failCount > 0) {
       incrementIncorrectCount(failCount);
+
+      if (unmadeDrinks.length > 0) {
+        const lastDrink = unmadeDrinks[unmadeDrinks.length - 1];
+
+        const drinkList =
+          unmadeDrinks.length === 1
+            ? lastDrink
+            : unmadeDrinks.length === 2
+              ? `${unmadeDrinks[0]} or the ${lastDrink}`
+              : `${unmadeDrinks.slice(0, -1).join(", ")}, or the ${lastDrink}`;
+
+        setFailMessage(`fail! you didn't make the ${drinkList}`);
+      }
 
       setCurrentOrder((prevOrder) => {
         setShowFailMessage(true);
