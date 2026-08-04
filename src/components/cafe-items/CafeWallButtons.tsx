@@ -1,6 +1,7 @@
 import { Button } from "../ui/Button";
 import { featureflag } from "../../feature-flags";
 import styled from "styled-components";
+import { Z_LAYERS } from "../../zLayers";
 
 type CafeWallButtonProps = {
   handleGetOrder: () => void;
@@ -9,7 +10,8 @@ type CafeWallButtonProps = {
 };
 
 const TopFixedContainer = styled.div`
-  z-index: 100;
+  /* pinned above the shelf and the ingredients on it */
+  z-index: ${Z_LAYERS.ui};
   position: fixed;
   top: 5vh;
   right: 0;

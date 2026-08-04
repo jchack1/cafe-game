@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "motion/react";
 import { ScoreText } from "./ScoreText";
+import { Z_LAYERS } from "../../zLayers";
 import type { RoundScoreResult } from "../../types";
 
 //how far apart each line sits, and how long the reveal/hold/fly phases take
@@ -12,8 +13,10 @@ const FLY_STAGGER = 0.2; //seconds between each line flying off
 const FLY_DURATION = 0.5; //seconds for a line's fly-into-score animation
 const HOLD_TIME = 3000; //ms all lines sit still so the player can read them
 
+//score sits above draggable ingredients
 const Wrapper = styled.div`
   position: relative;
+  z-index: ${Z_LAYERS.ui};
 `;
 
 const BreakdownList = styled.div`
