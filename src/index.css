@@ -35,6 +35,14 @@ h1 {
   line-height: 1.1;
 }
 
+.success-message-container {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: inline-block;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+}
 .success-message-container,
 .fail-message-container {
   animation: scale-out 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -125,6 +133,70 @@ h1 {
 }
 
 .success-message-container svg:nth-of-type(7) {
+  --x: 100;
+  --y: 50;
+  --s: 1.5;
+  --d: 7;
+}
+
+/* sparkles around the high score while it blooms in the middle of the page. same treatment as the
+   success message, but its own rules because this container gets scaled up by the intro animation -
+   the sparkles ride along with it, so they're authored small and end up around 30px on screen */
+.high-score-sparkle-container svg {
+  animation: sparkle 0.75s calc((var(--delay-step) * var(--d)) * 1s) both;
+  animation-iteration-count: infinite;
+  width: 9px;
+  position: absolute;
+
+  --delay-step: 0.1;
+  top: calc(var(--y, 50) * 1%);
+  left: calc(var(--x, 0) * 1%);
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.high-score-sparkle-container svg:nth-of-type(1) {
+  --x: 0;
+  --y: 20;
+  --s: 1.1;
+  --d: 1;
+}
+
+.high-score-sparkle-container svg:nth-of-type(2) {
+  --x: 15;
+  --y: 80;
+  --s: 1.25;
+  --d: 2;
+}
+
+.high-score-sparkle-container svg:nth-of-type(3) {
+  --x: 45;
+  --y: 40;
+  --s: 1.1;
+  --d: 3;
+}
+
+.high-score-sparkle-container svg:nth-of-type(4) {
+  --x: 75;
+  --y: 60;
+  --s: 0.9;
+  --d: 4;
+}
+
+.high-score-sparkle-container svg:nth-of-type(5) {
+  --x: 20;
+  --y: 30;
+  --s: 0.7;
+  --d: 5;
+}
+
+.high-score-sparkle-container svg:nth-of-type(6) {
+  --x: 60;
+  --y: 80;
+  --s: 1.2;
+  --d: 6;
+}
+
+.high-score-sparkle-container svg:nth-of-type(7) {
   --x: 100;
   --y: 50;
   --s: 1.5;

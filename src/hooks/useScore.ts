@@ -5,6 +5,23 @@ import type { Order, OrderItem, Recipe, RoundScoreResult } from "../types";
 //constants
 const INGREDIENT_DISCARD_DEDUCTION = 25;
 const INCORRECT_DRINK_DEDUCTION = 50;
+const HIGH_SCORE_KEY = "cafe-game-high-score";
+
+//read the player's best score from a previous visit. localStorage throws outright when storage is
+//blocked (private browsing, cookies off), and a hand-edited key would otherwise render as NaN, so
+//anything we can't trust falls back to "no high score yet"
+const readHighScore = (): number => {
+  try {
+    const stored = localStorage.getItem(HIGH_SCORE_KEY);
+    if (!stored) return 0;
+
+    const parsed = Number(stored);
+
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+  } catch {
+    return 0;
+  }
+};
 
 /**
  *
@@ -13,17 +30,14 @@ const INCORRECT_DRINK_DEDUCTION = 50;
 export const useScore = () => {
   const [currentRoundScore, setCurrentRoundScore] = useState<number>(0);
   const [totalScore, setTotalScore] = useState<number>(0);
-  //   const [previousScore, setPreviousScore] = useState<number>(0); //save in local storage, fetch on load
+  //best score across every visit. read straight into the initial state rather than in an effect, so
+  //the welcome-back animation has it on the very first paint instead of flickering in afterwards
+  const [highScore, setHighScore] = useState<number>(readHighScore);
   const [ingredientDiscardCount, setIngredientDiscardCount] =
     useState<number>(0);
   const [incorrectCount, setIncorrectCount] = useState<number>(0); //number of drinks they get wrong during round
   const [roundResult, setRoundResult] = useState<RoundScoreResult | null>(null); //breakdown of the last completed round, for the score animation
   const startTimeRef = useRef<number | null>(null); //when they started the order
-
-  //fetch previous score on load - for display
-  // useEffect(() => {
-
-  // }, [])
 
   //what do we need to get a score?
   //expose some functions that update the score in real time?
@@ -98,6 +112,8 @@ export const useScore = () => {
     setTotalScore(newTotal);
 
     resetScoreState();
+
+    saveNewScore(newTotal);
   };
 
   const clearRoundResult = () => {
@@ -162,12 +178,26 @@ export const useScore = () => {
     setIngredientDiscardCount(0);
   };
 
+  //only a new personal best is worth keeping - an ordinary round leaves the stored score alone
+  const saveNewScore = (updatedScore: number) => {
+    if (updatedScore <= highScore) return;
+
+    setHighScore(updatedScore);
+
+    try {
+      localStorage.setItem(HIGH_SCORE_KEY, String(updatedScore));
+    } catch {
+      //storage is blocked - the best score still counts for this session, it just won't survive a reload
+    }
+  };
+
   return {
     updateTotalScore,
     startTimer,
     incrementIngredientDiscardCount,
     incrementIncorrectCount,
     totalScore,
+    highScore,
     currentRoundScore,
     resetScoreState,
     roundResult,

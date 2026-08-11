@@ -51,7 +51,7 @@ import { ScoreBreakdown } from "./components/ui/ScoreBreakdown";
 
 /**
  *
- * @todo: major styling work; re-organize code
+ * @todo: re-organize code
  */
 function App() {
   //state
@@ -73,6 +73,7 @@ function App() {
     incrementIngredientDiscardCount,
     updateTotalScore,
     totalScore,
+    highScore,
     resetScoreState,
     roundResult,
     clearRoundResult,
@@ -400,6 +401,7 @@ function App() {
 
           <ScoreBreakdown
             totalScore={totalScore}
+            highScore={highScore}
             roundResult={roundResult}
             onRoundResultConsumed={clearRoundResult}
           />
