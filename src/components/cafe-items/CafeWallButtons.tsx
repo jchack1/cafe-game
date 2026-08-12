@@ -19,6 +19,8 @@ const TopFixedContainer = styled.div`
   top: max(5vh, ${MAX_TILE_RENDER_HEIGHT}px);
   right: 0;
   left: 0;
+  /* viewport-fit=cover lets content sit under the notch - keep the buttons clear of it */
+  padding-top: env(safe-area-inset-top);
 `;
 
 const FlexButtonContainer = styled.div`

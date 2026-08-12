@@ -14,7 +14,7 @@ type CounterProps = {
 //mugs positioned relative to counter so they animate across the screen properly - had issue with them showing up initially at the bottom of the screen, then jumping up once initial animation complete.
 const CounterBackground = styled.div`
   width: 100vw;
-  height: 50vh;
+  height: 50dvh;
   margin: 0;
 
   background-image: url("../../../images/background-items/Wood-Grain.JPG");

@@ -4,9 +4,13 @@ html {
   font-size: 1rem;
 }
 
+/* the game is a fixed, full-screen surface - no page scroll means mobile browsers stop
+   hiding/showing the address bar, and overscroll-behavior kills pull-to-refresh and bounce */
 html,
 body {
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 @media (max-width: 768px) {
@@ -26,7 +30,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100dvh;
   font-family: sans-serif;
 }
 

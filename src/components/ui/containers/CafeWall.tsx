@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const CafeWall = styled.div`
   width: 100vw;
-  height: 50vh;
+  height: 50dvh;
 
   display: flex;
   flex-direction: column;
