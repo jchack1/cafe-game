@@ -26,10 +26,13 @@ const INTRO_HOLD_TIME = 2500; //ms it sits big in the middle before shrinking aw
 //"measuring" is the one frame we need before we know where the resting slot is
 type IntroPhase = "measuring" | "growing" | "settling" | "done";
 
-//score sits above draggable ingredients
+//score sits above draggable ingredients. the auto margin splits the wall's spare height with the
+//shelf's own auto margins, so the score drops toward the middle but gives the room back when a short
+//landscape wall has none to spare
 const Wrapper = styled.div`
   position: relative;
   z-index: ${Z_LAYERS.ui};
+  margin-top: auto;
 `;
 
 //holds the current score's place in the layout even while it's hidden for the intro, so nothing below

@@ -1,12 +1,9 @@
-//wrappers that pin the background props to the decor level and keep their private z-indexes from
-//leaking into the rest of the scene (see zLayers.ts).
 import styled from "styled-components";
 import { Z_LAYERS } from "../../../zLayers";
 
-//fills the wall. clips, so the hanging plants spill off the *edge of the screen* instead of widening
-//the document - an overhang past the right edge grows the page's scroll width, which showed up as a
-//white gap beside the wall and counter. clipping at the wall's bounds matches the viewport edges here,
-//so the plants look exactly as they did, minus the overflow.
+//fills the wall. clips, so the hanging plants spill off the *edge of the screen* instead of widening the page
+//being absolute is also what keeps the string lights out of the wall's flow: the wall is a fixed-height
+
 export const WallDecorLayer = styled.div`
   position: absolute;
   inset: 0;

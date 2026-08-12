@@ -387,11 +387,11 @@ function App() {
       >
         <CafeWall>
           <WallDecorLayer>
+            {/* first, so the plants below paint over the lights rather than under them */}
+            <StringLights />
             <HangingPlant side="left" />
             <HangingPlant side="right" />
           </WallDecorLayer>
-
-          <StringLights />
 
           <CafeWallButtons
             handleGetOrder={handleGetOrder}

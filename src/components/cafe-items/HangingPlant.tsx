@@ -33,6 +33,14 @@ const PlantImg = styled.img<{ $side: "left" | "right" }>`
     ${(props) => (props.$side === "left" ? "left: -35px;" : "right: -35px;")}
     width: 115px;
   }
+
+  /* these steps only shrink the plant for narrow *width* - a landscape phone is wide but very short, so
+     the wall (50vh) shrinks while the plant stays full-size and ends up taller than the wall itself,
+     swallowing the string lights behind it. shrink hard once height gets tight, regardless of width. */
+  @media (max-height: 500px) {
+    top: -8px;
+    width: 90px;
+  }
 `;
 
 export const HangingPlant = ({ side }: HangingPlantProps) => {

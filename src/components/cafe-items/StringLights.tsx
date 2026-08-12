@@ -14,6 +14,10 @@ const TILE_ASPECT_RATIO = VIEWBOX_HEIGHT / VIEWBOX_WIDTH;
 const MAX_TILE_RENDER_WIDTH = 360;
 const MIN_VISIBLE_TILES = 2;
 
+//the tallest the lights ever render - exported so anything pinned near the top of the wall (e.g. the
+//buttons) can stay clear of them instead of guessing a fixed offset
+export const MAX_TILE_RENDER_HEIGHT = MAX_TILE_RENDER_WIDTH * TILE_ASPECT_RATIO;
+
 //single swag per tile - wire dips from one nail at the tile's left edge to one at the right edge
 const SWAG = {
   p0: { x: 0, y: 6 },
@@ -79,6 +83,7 @@ const twinkle = keyframes`
   50% { opacity: 0.5; }
 `;
 
+/* deliberately out of the wall's flow - rendered inside WallDecorLayer, which is absolutely positioned*/
 const LightsRow = styled.div`
   display: flex;
   width: 100%;
