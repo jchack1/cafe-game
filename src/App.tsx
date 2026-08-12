@@ -420,7 +420,7 @@ function App() {
                 position: "absolute",
                 bottom: "20px",
                 right: "20px",
-                zIndex: Z_LAYERS.ui,
+                zIndex: Z_LAYERS.buttons,
               }}
             >
               Complete

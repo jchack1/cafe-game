@@ -19,5 +19,6 @@ export const Z_LAYERS = {
   //buttons, score, recipe book, trash
   ui: 4,
   //the big success/fail text that flashes over the middle of the screen - always the topmost thing
-  message: 5,
+  buttons: 5, //recipes, complete, etc
+  message: 6,
 };

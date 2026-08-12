@@ -11,7 +11,7 @@ type CafeWallButtonProps = {
 
 const TopFixedContainer = styled.div`
   /* pinned above the shelf and the ingredients on it */
-  z-index: ${Z_LAYERS.ui};
+  z-index: ${Z_LAYERS.buttons};
   position: fixed;
   top: 5vh;
   right: 0;
