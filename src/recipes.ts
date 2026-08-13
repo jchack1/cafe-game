@@ -1,11 +1,21 @@
 import type { Recipe, Ingredient } from "./types";
 
+// export const ingredientsLevel1: Ingredient[] = [
 export const ingredients: Ingredient[] = [
   "espresso",
   "drip",
   "water",
   "milk",
   "chocolate",
+];
+
+export const ingredientsLevel2: Ingredient[] = [
+  "matcha",
+  "chai",
+  "earlGrey",
+  "chamomile",
+  "greenTea",
+  "vanillaSyrup",
 ];
 //maybe they can order just milk, or just water at some point? would they become their own recipe at that point?
 
@@ -80,11 +90,102 @@ export const recipes: Recipe[] = [
     level: 1,
     score: 150,
   },
-];
+  {
+    id: 8,
+    name: "cortado",
+    ingredients: {
+      milk: 1,
+      espresso: 1,
+    },
+    level: 1,
+    score: 110,
+  },
 
-//level 2:
-//tea drinks: matcha, chai, london fog
-//iced versions of above
+  //level 2 - matcha, tea, tea lattes
+
+  {
+    id: 9,
+    name: "matcha",
+    ingredients: {
+      matcha: 1,
+      water: 1,
+    },
+    level: 2,
+    score: 110,
+  },
+  {
+    id: 10,
+    name: "matcha latte",
+    ingredients: {
+      matcha: 1,
+      water: 1,
+      milk: 3,
+    },
+    level: 2,
+    score: 160,
+  },
+  {
+    id: 11,
+    name: "london fog",
+    ingredients: {
+      earlGrey: 1,
+      milk: 3,
+      vanillaSyrup: 1,
+    },
+    level: 2,
+    score: 160,
+  },
+  {
+    id: 12,
+    name: "chai latte",
+    ingredients: {
+      chai: 1,
+      milk: 3,
+    },
+    level: 2,
+    score: 140,
+  },
+  {
+    id: 13,
+    name: "earl grey tea",
+    ingredients: {
+      earlGrey: 1,
+      water: 3,
+    },
+    level: 2,
+    score: 120,
+  },
+  {
+    id: 14,
+    name: "chai tea",
+    ingredients: {
+      chai: 1,
+      water: 3,
+    },
+    level: 2,
+    score: 120,
+  },
+  {
+    id: 15,
+    name: "green tea",
+    ingredients: {
+      greenTea: 1,
+      water: 3,
+    },
+    level: 2,
+    score: 120,
+  },
+  {
+    id: 16,
+    name: "chamomile tea",
+    ingredients: {
+      chamomile: 1,
+      water: 3,
+    },
+    level: 2,
+    score: 120,
+  },
+];
 
 //level 3:
 //alt milks: oat, almond, soy
