@@ -462,7 +462,10 @@ function App() {
                   />
 
                   {/* mug icon */}
-                  <Mug id={item.id} />
+                  <Mug
+                    id={item.id}
+                    cupName={recipeMap[item.recipeId].cupName}
+                  />
 
                   {/* item name, and result*/}
                   <div

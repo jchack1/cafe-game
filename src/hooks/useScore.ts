@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { recipes } from "../recipes";
 import type { Order, OrderItem, Recipe, RoundScoreResult } from "../types";
 
@@ -39,10 +39,21 @@ export const useScore = () => {
   const [roundResult, setRoundResult] = useState<RoundScoreResult | null>(null); //breakdown of the last completed round, for the score animation
   const startTimeRef = useRef<number | null>(null); //when they started the order
 
-  //what do we need to get a score?
-  //expose some functions that update the score in real time?
-  //add scores to recipes? and import recipes so we can add up those totals
+  //keep current level in session storage
+  //update this when a specific score is reached (TODO)
+  //should this be its own hook?
+  const [level, setLevel] = useState<number>(1);
 
+  useEffect(() => {
+    const sessionLevel = sessionStorage.getItem("level");
+
+    if (!sessionLevel) {
+      sessionStorage.setItem("level", "1");
+      setLevel(1);
+    } else {
+      setLevel(Number(sessionLevel));
+    }
+  }, []);
   //once complete, add current score to total score, and reset current score
   const updateTotalScore = (order: Order) => {
     if (!order) {
@@ -202,5 +213,6 @@ export const useScore = () => {
     resetScoreState,
     roundResult,
     clearRoundResult,
+    level,
   };
 };

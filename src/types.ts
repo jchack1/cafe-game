@@ -16,6 +16,7 @@ export type Recipe = {
   };
   level: number; //earlier in the game, only pull low level recipes
   score: number;
+  cupName: string;
 };
 
 export type OrderItem = {

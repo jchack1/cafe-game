@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SmallButton from "../ui/SmallButton";
 import { Howl } from "howler";
 import { Z_LAYERS } from "../../zLayers";
+import { useScore } from "../../hooks/useScore";
 
 const RecipePage = styled.div`
   width: 80vw;
@@ -51,6 +52,11 @@ export const RecipeBook = ({
   setShowRecipe: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState<number>(0);
+
+  //only show recipes in user's current level
+  const { level } = useScore();
+
+  const recipesToShow = recipes.filter((recipe) => recipe.level <= level);
 
   const turnPageSound = new Howl({
     src: ["soundEffects/turnpage.mp3"],
@@ -103,7 +109,7 @@ export const RecipeBook = ({
       <div>
         <RecipeTitle>{recipes[currentRecipeIndex].name}</RecipeTitle>
 
-        {Object.entries(recipes[currentRecipeIndex].ingredients).map(
+        {Object.entries(recipesToShow[currentRecipeIndex].ingredients).map(
           ([ingredient, number]) => (
             <RecipeLine key={`${number}-${ingredient}`}>
               {number} {ingredient}{" "}
@@ -128,7 +134,7 @@ export const RecipeBook = ({
           setCurrentRecipeIndex(currentRecipeIndex + 1);
           turnPageSound.play();
         }}
-        disabled={currentRecipeIndex === recipes.length - 1}
+        disabled={currentRecipeIndex === recipesToShow.length - 1}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

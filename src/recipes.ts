@@ -29,6 +29,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 100,
+    cupName: "Espresso-Cup",
   },
   {
     id: 2,
@@ -38,6 +39,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 100,
+    cupName: "mug",
   },
   {
     id: 3,
@@ -48,6 +50,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 120,
+    cupName: "mug",
   },
   {
     id: 4,
@@ -58,6 +61,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 130,
+    cupName: "mug",
   },
   {
     id: 5,
@@ -68,6 +72,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 140,
+    cupName: "mug",
   },
   {
     id: 6,
@@ -79,6 +84,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 160,
+    cupName: "Hot-Chocolate-Mug",
   },
   {
     id: 7,
@@ -89,6 +95,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 150,
+    cupName: "Hot-Chocolate-Mug",
   },
   {
     id: 8,
@@ -99,6 +106,7 @@ export const recipes: Recipe[] = [
     },
     level: 1,
     score: 110,
+    cupName: "Espresso-Cup",
   },
 
   //level 2 - matcha, tea, tea lattes
@@ -112,6 +120,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 110,
+    cupName: "Matcha-Cup",
   },
   {
     id: 10,
@@ -123,6 +132,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 160,
+    cupName: "Matcha-Latte-Mug",
   },
   {
     id: 11,
@@ -134,6 +144,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 160,
+    cupName: "London-Fog-Mug",
   },
   {
     id: 12,
@@ -144,6 +155,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 140,
+    cupName: "Chai-Latte-Mug",
   },
   {
     id: 13,
@@ -154,6 +166,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 120,
+    cupName: "Tea-Cup",
   },
   {
     id: 14,
@@ -164,6 +177,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 120,
+    cupName: "Tea-Cup",
   },
   {
     id: 15,
@@ -174,6 +188,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 120,
+    cupName: "Tea-Cup",
   },
   {
     id: 16,
@@ -184,6 +199,7 @@ export const recipes: Recipe[] = [
     },
     level: 2,
     score: 120,
+    cupName: "Tea-Cup",
   },
 ];
 
