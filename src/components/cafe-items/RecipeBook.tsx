@@ -4,7 +4,7 @@ import styled from "styled-components";
 import SmallButton from "../ui/SmallButton";
 import { Howl } from "howler";
 import { Z_LAYERS } from "../../zLayers";
-import { useScore } from "../../hooks/useScore";
+import { useLevel } from "../../context/LevelContext";
 
 const RecipePage = styled.div`
   width: 80vw;
@@ -54,7 +54,7 @@ export const RecipeBook = ({
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState<number>(0);
 
   //only show recipes in user's current level
-  const { level } = useScore();
+  const { level } = useLevel();
 
   const recipesToShow = recipes.filter((recipe) => recipe.level <= level);
 

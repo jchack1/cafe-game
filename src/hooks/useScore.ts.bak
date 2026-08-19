@@ -43,13 +43,15 @@ export const useScore = () => {
 
   const { setLevel } = useLevel();
 
-  //promote on score, never demote - a player already past level 2 keeps their progress
   useEffect(() => {
+    console.log(totalScore);
     if (totalScore >= LEVEL_2_MIN) {
-      setLevel((prev) => Math.max(prev, 2));
+      console.log("next level");
+      console.log("totalScore");
+      console.log(totalScore);
+      setLevel(2);
     }
-  }, [totalScore, setLevel]);
-
+  }, [totalScore]);
   //once complete, add current score to total score, and reset current score
   const updateTotalScore = (order: Order) => {
     if (!order) {
@@ -209,5 +211,6 @@ export const useScore = () => {
     resetScoreState,
     roundResult,
     clearRoundResult,
+    level,
   };
 };

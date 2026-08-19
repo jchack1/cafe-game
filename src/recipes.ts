@@ -1,7 +1,7 @@
 import type { Recipe, Ingredient } from "./types";
 
 // export const ingredientsLevel1: Ingredient[] = [
-export const ingredients: Ingredient[] = [
+const ingredientsLevel1: Ingredient[] = [
   "espresso",
   "drip",
   "water",
@@ -9,7 +9,7 @@ export const ingredients: Ingredient[] = [
   "chocolate",
 ];
 
-export const ingredientsLevel2: Ingredient[] = [
+const ingredientsLevel2: Ingredient[] = [
   "matcha",
   "chai",
   "earlGrey",
@@ -17,6 +17,11 @@ export const ingredientsLevel2: Ingredient[] = [
   "greenTea",
   "vanillaSyrup",
 ];
+
+export const ingredientMap = {
+  1: ingredientsLevel1,
+  2: ingredientsLevel2,
+};
 //maybe they can order just milk, or just water at some point? would they become their own recipe at that point?
 
 //hardcoded recipes for now

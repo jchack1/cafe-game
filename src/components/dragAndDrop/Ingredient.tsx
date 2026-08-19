@@ -7,35 +7,42 @@ type IngredientComponentProps = {
 };
 
 //explicity give styled component prop type because typescript
+//$ prefixed so styled-components keeps them in css instead of forwarding them onto the <img>,
+//where height="7vw" would be an invalid html attribute
 type IngredientImageProps = {
-  width?: string;
-  minWidth?: string;
+  $height?: string;
+  $minHeight?: string;
 };
 
-const IngredientImage = styled.img<IngredientImageProps>`
+//sized by height, not width - the artwork has wildly different aspect ratios (the syrup bottle is
+//more than twice as tall as it is wide) so matching widths made some ingredients tower over others
+export const IngredientImage = styled.img<IngredientImageProps>`
   margin: 10px 10px 2px;
-  width: ${(props) => props.width ?? "100px"};
+  height: ${(props) => props.$height ?? "7vw"};
+  width: auto;
 
   @media (max-width: 550px) {
-    width: ${(props) => props.minWidth ?? "40px"};
+    height: ${(props) => props.$minHeight ?? "45px"};
   }
 `;
 
 //need to specify size for each ingredient so the items look better on the shelf
-const ingredientWidthMap: Record<string, string> = {
-  espresso: "5vw",
-  drip: "12vw",
-  water: "14vw",
-  milk: "8vw",
-  chocolate: "8vw",
+export const ingredientHeightMap: Record<string, string> = {
+  espresso: "6.5vw",
+  drip: "10vw",
+  water: "9.5vw",
+  milk: "7vw",
+  chocolate: "5vw",
+  vanillaSyrup: "8vw",
 };
 
-const ingredientMinWidthMap: Record<string, string> = {
-  espresso: "30px",
-  drip: "80px",
-  water: "100px",
-  milk: "50px",
-  chocolate: "55px",
+export const ingredientMinHeightMap: Record<string, string> = {
+  espresso: "40px",
+  drip: "67px",
+  water: "68px",
+  milk: "45px",
+  chocolate: "35px",
+  vanillaSyrup: "52px",
 };
 
 export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
@@ -60,8 +67,8 @@ export const Ingredient = ({ ingredient }: IngredientComponentProps) => {
       {...listeners}
       {...attributes}
       style={style}
-      width={ingredientWidthMap[ingredient]}
-      minWidth={ingredientMinWidthMap[ingredient]}
+      $height={ingredientHeightMap[ingredient]}
+      $minHeight={ingredientMinHeightMap[ingredient]}
     />
   );
 };

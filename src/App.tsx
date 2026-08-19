@@ -48,6 +48,7 @@ import { Howl } from "howler";
 import { motion, AnimatePresence } from "motion/react";
 import { isTouchDevice } from "./utils/isTouchDevice";
 import { ScoreBreakdown } from "./components/ui/ScoreBreakdown";
+import { useLevel } from "./context/LevelContext";
 
 /**
  *
@@ -57,7 +58,6 @@ function App() {
   //state
 
   const [currentOrder, setCurrentOrder] = useState<Order>();
-  const [level] = useState<number>(1);
   const [showRecipe, setShowRecipe] = useState<boolean>(false);
 
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
@@ -78,6 +78,8 @@ function App() {
     roundResult,
     clearRoundResult,
   } = useScore();
+
+  const { level } = useLevel();
 
   const [selectedIngredients, setSelectedIngredients] =
     useState<SelectedIngredients>({});
